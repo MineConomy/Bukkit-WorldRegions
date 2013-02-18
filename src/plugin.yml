@@ -1,0 +1,36 @@
+name: WorldRegions
+description: Add more flags and features to WorldGuard regions.
+author: Wolflink289
+website: http://dev.bukkit.org/server-mods/worldregions/
+
+version: 1.0.0
+main: com.wolflink289.bukkit.worldregions.WorldRegionsPlugin
+
+depend: [WorldGuard]
+softdepend: [ProtocolLib]
+
+permissions:
+    worldguard.region.flag.flags.*:
+        description: Allows the player to bypass all WorldRegion and WorldGuard flags.
+        default: false
+        children:
+            worldguard.region.flag.flags.pve: false
+            worldguard.region.flag.flags.mob-targeting: false
+            worldguard.region.flag.flags.hunger: false
+            worldguard.region.flag.flags.regen: false
+            worldguard.region.flag.flags.healing: false
+    worldguard.region.flag.flags.pve:
+        description: Allows the player to bypass not being allowed to attack mobs in no-PvE areas.
+        default: false
+    worldguard.region.flag.flags.mob-targeting:
+        description: Allows the player to bypass not being targeted by mobs in no-targeting areas.
+        default: false
+    worldguard.region.flag.flags.hunger:
+        description: Allows the player to bypass not having hunger in no-hunger areas.
+        default: false
+    worldguard.region.flag.flags.regen:
+        description: Allows the player to bypass not regenerate health at full hunger in no-regen areas.
+        default: false
+    worldguard.region.flag.flags.healing:
+        description: Allows the player to bypass not being able to heal in no-healing areas.
+        default: false
