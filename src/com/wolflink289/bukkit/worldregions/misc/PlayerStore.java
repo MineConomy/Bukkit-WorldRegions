@@ -33,7 +33,6 @@ public class PlayerStore {
 			if (store == null) {
 				store = new PlayerStore(player);
 				stored.put(player.getEntityId(), store);
-				System.out.println("STORE::GENERATE, " + player.getName());
 				regenlist();
 			}
 		}
@@ -58,9 +57,17 @@ public class PlayerStore {
 		synchronized (stored_sync) {
 			if (stored.containsKey(player.getEntityId())) {
 				stored.remove(player.getEntityId());
-				System.out.println("STORE::DESTROY, " + player.getName());
 				regenlist();
 			}
+		}
+	}
+	
+	/**
+	 * Clear all the PlayerStore objects from the PlayerStore cache.
+	 */
+	static public void clear() {
+		synchronized (stored_sync) {
+			stored.clear();
 		}
 	}
 	
@@ -94,6 +101,8 @@ public class PlayerStore {
 	
 	private final String name;
 	
-	public Location last_location;
+	public byte orig_state_fly = (byte) -1;
+	public byte last_state_fly = (byte) -1;
+	public Location last_location = null;
 	public PotionEffectList effects = null;
 }

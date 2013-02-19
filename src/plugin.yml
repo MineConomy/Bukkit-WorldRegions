@@ -28,3 +28,6 @@ permissions:
     worldguard.region.flag.flags.apply-potion:
         description: The player will receive potion effects in apply-potion areas.
         default: true
+    worldguard.region.flag.flags.fly:
+        description: The player will be allowed to or block from flying in areas with "fly" set.
+        default: true

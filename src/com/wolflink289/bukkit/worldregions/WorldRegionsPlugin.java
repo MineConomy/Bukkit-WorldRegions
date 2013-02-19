@@ -1,15 +1,19 @@
 package com.wolflink289.bukkit.worldregions;
 
+import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.listen.EntityListener;
 import com.wolflink289.bukkit.worldregions.listen.PlayerListener;
+import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
 
 public class WorldRegionsPlugin extends JavaPlugin {
 	
 	// Variables
+	static private WorldRegionsConfig config;
 	static private Logger log;
 	static private WorldRegionsPlugin instance;
 	static private WorldGuardPlugin instance_wg;
@@ -43,6 +47,10 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		return log;
 	}
 	
+	public WorldRegionsConfig getConf() {
+		return config;
+	}
+	
 	// Listener: Plugin Loaded
 	@Override
 	public void onLoad() {
@@ -64,6 +72,10 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (!loaded) onLoad();
+
+		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
+		
+		config = new WorldRegionsConfig(new File(instance_wg.getDataFolder(), "config_flags.yml"));
 		
 		getServer().getPluginManager().registerEvents(new EntityListener(), instance);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
@@ -73,6 +85,21 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Flags.release();
+		
+		// Reset
+		List<PlayerStore> stores = PlayerStore.all();
+		
+		for (int i = 0; i < stores.size(); i++) {
+			PlayerStore store = stores.get(i);
+
+			// FLY
+			if (store.orig_state_fly != -1) {
+				store.getPlayer().setAllowFlight(store.orig_state_fly == 1);
+			}
+		}
+		
+		// Finish
+		PlayerStore.clear();
 		loaded = false;
 	}
 }

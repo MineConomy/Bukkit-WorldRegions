@@ -19,9 +19,10 @@ public final class Flags {
 	static public final StateFlag HUNGER = new StateFlag("hunger", true, RegionGroup.ALL);
 	static public final StateFlag REGEN = new StateFlag("regen", true, RegionGroup.ALL);
 	static public final StateFlag HEALING = new StateFlag("healing", true, RegionGroup.ALL);
+	static public final StateFlag FLY = new StateFlag("fly", true, RegionGroup.ALL);
 	static public final PotionEffectListFlag APPLY_POTION = new PotionEffectListFlag("apply-potion", RegionGroup.ALL);
 	
-	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION };
+	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY };
 	static public final Flag<?>[] originals = DefaultFlag.getFlags();
 	
 	// Get Flags

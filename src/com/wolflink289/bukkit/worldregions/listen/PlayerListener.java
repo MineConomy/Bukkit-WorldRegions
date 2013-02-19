@@ -11,7 +11,9 @@ import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.potion.PotionEffect;
+import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
@@ -88,35 +90,117 @@ public class PlayerListener implements Listener {
 	}
 	
 	/**
-	 * Listener for: APPLY-POTION
+	 * Listener for: APPLY-POTION, FLY
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getTo().getWorld())) return;
+		Player player = event.getPlayer();
 		
-		// Not allowed
-		if (!WGCommon.willFlagApply((Player) event.getPlayer(), Flags.APPLY_POTION)) return;
 		
-		// Get / Check
-		Object res = RegionUtil.getFlag(Flags.APPLY_POTION, event.getTo());
-		if (res == null) return;
-		
-		// Apply
-		PlayerStore store = PlayerStore.get(event.getPlayer());
-		store.effects = (PotionEffectList) res;
-		
-		event.getPlayer().addPotionEffects(store.effects);
-		
-		// Start?
-		if (!timedtask) {
-			timedtask = true;
-			WorldRegionsPlugin.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(WorldRegionsPlugin.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					onTick();
+		// APPLY-POTION
+		if (WGCommon.willFlagApply(player, Flags.APPLY_POTION)) {
+			
+			// Get / Check
+			Object res = RegionUtil.getFlag(Flags.APPLY_POTION, event.getTo());
+			if (res != null) {
+				
+				// Apply
+				PlayerStore store = PlayerStore.get(player);
+				store.effects = (PotionEffectList) res;
+				
+				player.addPotionEffects(store.effects);
+				
+				// Start?
+				if (!timedtask) {
+					timedtask = true;
+					WorldRegionsPlugin.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(WorldRegionsPlugin.getInstance(), new Runnable() {
+						@Override
+						public void run() {
+							onTick();
+						}
+					}, 1, 1);
 				}
-			}, 1, 1);
+			}
+		}
+		
+		// FLY
+		if (WorldRegionsPlugin.getInstance().getConf().FLY_ENABLED && WGCommon.willFlagApply(player, Flags.FLY)) {
+			// Get / Check
+			Object res = RegionUtil.getFlagAsObject(Flags.FLY, event.getTo());
+			PlayerStore store = PlayerStore.get(player);
+			
+			// Apply
+			if (res == null && store.last_state_fly != -1) {
+				if (store.orig_state_fly != (byte) (player.getAllowFlight() ? 1 : 0)) {
+					player.setAllowFlight(store.orig_state_fly == 1);
+					
+					// Message
+					String msg = "";
+					if (store.orig_state_fly == 0) {
+						msg = WorldRegionsPlugin.getInstance().getConf().FLY_MSG_RESET_ALLOW;
+					} else {
+						msg = WorldRegionsPlugin.getInstance().getConf().FLY_MSG_RESET_BLOCK;
+					}
+					
+					if (!msg.isEmpty()) {
+						player.sendMessage(msg);
+					}
+				}
+				
+				// Clear store
+				store.orig_state_fly = (byte) -1;
+				store.last_state_fly = store.orig_state_fly;
+			} else if (res != null) {
+				if (store.last_state_fly == -1 || (byte) (res == StateFlag.State.ALLOW ? 1 : 0) != store.last_state_fly) {
+					if (player.getAllowFlight() != (res == StateFlag.State.ALLOW)) {
+						if (store.last_state_fly == -1) {
+							store.orig_state_fly = (byte) (player.getAllowFlight() ? 1 : 0);
+							store.last_state_fly = store.orig_state_fly;
+						}
+						
+						store.last_state_fly = (byte) (res == StateFlag.State.ALLOW ? 1 : 0);
+						player.setAllowFlight(res == StateFlag.State.ALLOW);
+						
+						// Message
+						String msg = "";
+						if (res == StateFlag.State.ALLOW) {
+							msg = WorldRegionsPlugin.getInstance().getConf().FLY_MSG_SET_ALLOW;
+						} else {
+							msg = WorldRegionsPlugin.getInstance().getConf().FLY_MSG_SET_BLOCK;
+						}
+						
+						if (!msg.isEmpty()) {
+							player.sendMessage(msg);
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Listener for: APPLY-POTION, FLY
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onModeChanged(PlayerGameModeChangeEvent event) {
+		Player player = event.getPlayer();
+		
+		// FLY
+		if (WorldRegionsPlugin.getInstance().getConf().FLY_ENABLED && WGCommon.willFlagApply(player, Flags.FLY)) {
+			// Get / Check
+			PlayerStore store = PlayerStore.get(player);
+			
+			if (store.last_state_fly != -1) {
+				if (player.getAllowFlight()) {
+					store.orig_state_fly = 1;
+				} else {
+					store.orig_state_fly = 0;
+				}
+				
+				player.setAllowFlight(store.last_state_fly == 1);
+			}
 		}
 	}
 	
