@@ -29,27 +29,13 @@ public class RegionUtil {
 	// TODO javadoc
 	static public Object getFlagAsObject(Flag<?> flag, Location location) {
 		ApplicableRegionSet regions = WorldRegionsPlugin.getWorldGuard().getRegionManager(location.getWorld()).getApplicableRegions(location);
-		
-		for (ProtectedRegion region : regions) {
-			if (region.getFlag(flag) == null) continue;
-			// TODO parent algorithm
-			return region.getFlag(flag);
-		}
-		
-		return null;
+		return regions.getFlag(flag);
 	}
 	
 	// TODO javadoc
 	static public Object getFlag(Flag<?> flag, Location location) {
 		ApplicableRegionSet regions = WorldRegionsPlugin.getWorldGuard().getRegionManager(location.getWorld()).getApplicableRegions(location);
-		
-		for (ProtectedRegion region : regions) {
-			if (region.getFlag(flag) == null) continue;
-			// TODO parent algorithm
-			return region.getFlag(flag);
-		}
-		
-		return null;
+		return regions.getFlag(flag);
 	}
 	
 	// TODO javadoc
@@ -67,13 +53,6 @@ public class RegionUtil {
 	// TODO javadoc
 	static public Integer getFlag(IntegerFlag flag, Location location) {
 		ApplicableRegionSet regions = WorldRegionsPlugin.getWorldGuard().getRegionManager(location.getWorld()).getApplicableRegions(location);
-		
-		for (ProtectedRegion region : regions) {
-			if (region.getFlag(flag) == null) continue;
-			// TODO parent algorithm
-			return region.getFlag(flag);
-		}
-		
-		return null;
+		return (Integer) regions.getFlag(flag);
 	}
 }
