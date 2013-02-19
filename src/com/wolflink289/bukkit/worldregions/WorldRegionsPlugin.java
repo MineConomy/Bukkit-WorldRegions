@@ -4,8 +4,8 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
-import com.wolflink289.bukkit.worldregions.lstn.EntityListener;
-import com.wolflink289.bukkit.worldregions.lstn.PlayerListener;
+import com.wolflink289.bukkit.worldregions.listen.EntityListener;
+import com.wolflink289.bukkit.worldregions.listen.PlayerListener;
 
 public class WorldRegionsPlugin extends JavaPlugin {
 	
@@ -13,6 +13,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	static private Logger log;
 	static private WorldRegionsPlugin instance;
 	static private WorldGuardPlugin instance_wg;
+	static private boolean loaded = false;
 	
 	// Methods
 	/**
@@ -45,6 +46,8 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	// Listener: Plugin Loaded
 	@Override
 	public void onLoad() {
+		if (loaded) return;
+		
 		// Set static variables
 		instance = this;
 		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
@@ -52,11 +55,16 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		
 		// Inject flags
 		Flags.inject();
+		
+		// Set loaded
+		loaded = true;
 	}
 	
 	// Listener: Plugin Enabled
 	@Override
 	public void onEnable() {
+		if (!loaded) onLoad();
+		
 		getServer().getPluginManager().registerEvents(new EntityListener(), instance);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
 	}
@@ -65,5 +73,6 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		Flags.release();
+		loaded = false;
 	}
 }
