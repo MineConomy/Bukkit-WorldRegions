@@ -7,6 +7,11 @@ import com.sk89q.worldguard.bukkit.WorldConfiguration;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 
+/**
+ * Common WorldGuard flag checks.
+ * 
+ * @author Wolflink289
+ */
 public class WGCommon {
 	
 	/**
@@ -34,8 +39,8 @@ public class WGCommon {
 		if (!player.hasPermission("worldguard.region.flag.flags." + flag.getName())) return false;
 		
 		// Bypass?
-        // TODO fix: if (WorldRegionsPlugin.getWorldGuard().getGlobalRegionManager().hasBypass(player, player.getWorld())) return false;
-        
-        return true;
+		// TODO fix: if (WorldRegionsPlugin.getWorldGuard().getGlobalRegionManager().hasBypass(player, player.getWorld())) return false;
+		
+		return true;
 	}
 }

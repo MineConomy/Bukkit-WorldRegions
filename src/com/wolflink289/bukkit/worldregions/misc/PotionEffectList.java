@@ -7,6 +7,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import com.wolflink289.bukkit.worldregions.util.TimeUtil;
 
+/**
+ * The array list used in the PotionEffectListFlag flag type.
+ * 
+ * @author Wolflink289
+ */
 public class PotionEffectList extends ArrayList<PotionEffect> {
 	private static final long serialVersionUID = 2230002600165589763L;
 	
@@ -50,7 +55,7 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 				
 				if (dur < 1) continue;
 				if (amp < 0) continue;
-
+				
 				ef.add(type.createEffect((int) (dur / type.getDurationModifier()), amp));
 			} catch (Exception ex) {
 				ex.printStackTrace();

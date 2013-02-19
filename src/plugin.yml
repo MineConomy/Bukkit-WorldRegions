@@ -12,7 +12,7 @@ softdepend: [ProtocolLib]
 permissions:
     worldguard.region.flag.flags.pve:
         description: The player will not be allowed to attack mobs in no-PvE areas.
-        default: true
+        default: not op
     worldguard.region.flag.flags.mob-targeting:
         description: Mobs will not be allowed to attack the player in no-targeting areas.
         default: true
