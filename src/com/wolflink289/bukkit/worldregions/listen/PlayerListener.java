@@ -30,6 +30,8 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onFoodLevelChance(FoodLevelChangeEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().HUNGER_ENABLED) return;
+		
 		if (!(event.getEntity() instanceof Player)) return;
 		if (RegionUtil.getFlag(Flags.HUNGER, event.getEntity().getLocation())) return;
 		if (((Player) event.getEntity()).getFoodLevel() < event.getFoodLevel()) return;
@@ -49,18 +51,20 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onFoodLevelChance(EntityRegainHealthEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().HEALING_ENABLED && !WorldRegionsPlugin.getInstance().getConf().REGEN_ENABLED) return;
+		
 		if (!(event.getEntity() instanceof Player)) return;
 		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
-		if (!RegionUtil.getFlag(Flags.HEALING, event.getEntity().getLocation())) {
+		if (WorldRegionsPlugin.getInstance().getConf().HEALING_ENABLED && !RegionUtil.getFlag(Flags.HEALING, event.getEntity().getLocation())) {
 			// Not allowed
 			if (!WGCommon.willFlagApply((Player) event.getEntity(), Flags.HEALING)) return;
 			
 			// Cancel event
 			event.setCancelled(true);
-		} else if (event.getRegainReason() == RegainReason.SATIATED) {
+		} else if (WorldRegionsPlugin.getInstance().getConf().REGEN_ENABLED && event.getRegainReason() == RegainReason.SATIATED) {
 			if (RegionUtil.getFlag(Flags.REGEN, event.getEntity().getLocation())) return;
 			
 			// Not allowed
@@ -94,13 +98,15 @@ public class PlayerListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerMove(PlayerMoveEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().FLY_ENABLED && !WorldRegionsPlugin.getInstance().getConf().APPLY_POTION_ENABLED) return;
+		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getTo().getWorld())) return;
 		Player player = event.getPlayer();
 		
 		
 		// APPLY-POTION
-		if (WGCommon.willFlagApply(player, Flags.APPLY_POTION)) {
+		if (WorldRegionsPlugin.getInstance().getConf().APPLY_POTION_ENABLED && WGCommon.willFlagApply(player, Flags.APPLY_POTION)) {
 			
 			// Get / Check
 			Object res = RegionUtil.getFlag(Flags.APPLY_POTION, event.getTo());

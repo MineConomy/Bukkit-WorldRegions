@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.misc.WGCommon;
 import com.wolflink289.bukkit.worldregions.util.RegionUtil;
@@ -19,6 +20,8 @@ public class EntityListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onTarget(EntityTargetEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().MOB_TARGETING_ENABLED) return;
+		
 		// Check if player, then check if targeting allowed
 		if (!(event.getTarget() instanceof Player)) return;
 		if (RegionUtil.getFlag(Flags.MOB_TARGETING, event.getTarget().getLocation())) return;
@@ -35,6 +38,8 @@ public class EntityListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDamage(EntityDamageEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().PVE_ENABLED) return;
+		
 		// Check cause, check if damaged by entity
 		if (event.getCause() != DamageCause.ENTITY_ATTACK) return;
 		if (!(event instanceof EntityDamageByEntityEvent)) return;
@@ -61,6 +66,8 @@ public class EntityListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDoorBreak(EntityBreakDoorEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().ZOMBIE_DOOR_BREAK_ENABLED) return;
+		
 		// Check if door breaking allowed
 		if (RegionUtil.getFlag(Flags.ZOMBIE_DOOR_BREAK, event.getEntity().getLocation())) return;
 
@@ -73,6 +80,8 @@ public class EntityListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void onItemSpawn(ItemSpawnEvent event) {
+		if (!WorldRegionsPlugin.getInstance().getConf().ITEM_SPAWN_ENABLED) return;
+		
 		// Check if door breaking allowed
 		if (RegionUtil.getFlag(Flags.ITEM_SPAWN, event.getEntity().getLocation())) return;
 

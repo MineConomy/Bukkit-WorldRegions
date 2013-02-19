@@ -75,7 +75,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 
 		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
 		
-		config = new WorldRegionsConfig(new File(instance_wg.getDataFolder(), "config_flags.yml"));
+		config = new WorldRegionsConfig(new File(instance_wg.getDataFolder(), "config_worldregions.yml"));
 		
 		getServer().getPluginManager().registerEvents(new EntityListener(), instance);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
