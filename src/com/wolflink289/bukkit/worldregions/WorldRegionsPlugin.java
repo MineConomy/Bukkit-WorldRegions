@@ -73,7 +73,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		if (!loaded) onLoad();
-
+		
 		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
 		
 		config = new WorldRegionsConfig(new File(instance_wg.getDataFolder(), "config_worldregions.yml"));
@@ -93,7 +93,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		
 		for (int i = 0; i < stores.size(); i++) {
 			PlayerStore store = stores.get(i);
-
+			
 			// FLY
 			if (store.orig_state_fly != -1) {
 				store.getPlayer().setAllowFlight(store.orig_state_fly == 1);

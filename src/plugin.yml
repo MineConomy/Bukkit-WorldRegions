@@ -45,3 +45,12 @@ permissions:
     worldregions.bypass.flag.blocked-place:
         description: The player will still be able to place blocks that were blacklisted with "blocked-place".
         default: op
+    worldregions.bypass.flag.blocked-damage:
+        description: The player will still be able to take damage by methods that were blacklisted with "blocked-damage".
+        default: false
+    worldregions.bypass.flag.allowed-damage:
+        description: The player will still be able to take damage by methods not whitelisted with "allowed-damae".
+        default: false
+    worldregions.bypass.flag.instabreak:
+        description: The player will not be able to instantly break blocks in areas with "instabreak" allowed.
+        default: false

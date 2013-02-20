@@ -3,14 +3,14 @@ package com.wolflink289.bukkit.worldregions.misc;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.Material;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 /**
- * The array list used in the BlockListFlag flag type.
+ * The array list used in the DamageListFlag flag type.
  * 
  * @author Wolflink289
  */
-public class BlockList extends ArrayList<Material> {
+public class DamageList extends ArrayList<DamageCause> {
 	private static final long serialVersionUID = 2230002600165589763L;
 	
 	// Replace toString method
@@ -18,7 +18,7 @@ public class BlockList extends ArrayList<Material> {
 	public String toString() {
 		String msd = "";
 		for (int i = 0; i < size(); i++) {
-			Material block = get(i);
+			DamageCause block = get(i);
 			if (i == 0) {
 				msd = block.name();
 			} else {
@@ -30,50 +30,44 @@ public class BlockList extends ArrayList<Material> {
 	}
 	
 	// Parse
-	static public BlockList unmarshal(String str) {
+	static public DamageList unmarshal(String str) {
 		str = str.trim();
 		
 		if (str.startsWith("[")) str = str.substring(1);
 		if (str.endsWith("]")) str = str.substring(0, str.length() - 1);
 		
-		BlockList blk = new BlockList();
+		DamageList dmg = new DamageList();
 		String[] list = str.split(",");
 		for (int i = 0; i < list.length; i++) {
 			try {
-				blk.add(getType(list[i].trim()));
+				dmg.add(getType(list[i].trim()));
 			} catch (Exception ex) {}
 		}
 		
-		if (blk.isEmpty()) return null;
-		return blk;
+		if (dmg.isEmpty()) return null;
+		return dmg;
 	}
 	
-	static public BlockList parse(String str) {
+	static public DamageList parse(String str) {
 		if (str == null) return null;
 		
 		// Split
 		str = str.trim();
 		String[] blocks = str.split(",");
 		
-		BlockList blk = new BlockList();
+		DamageList dmg = new DamageList();
 		for (int i = 0; i < blocks.length; i++) {
 			// Get data
-			blk.add(getType(blocks[0].trim()));
+			dmg.add(getType(blocks[0].trim()));
 		}
 		
-		return blk;
+		return dmg;
 	}
 	
 	// Get potion effect type
-	static private Material getType(String str) {
-		// By ID
-		try {
-			Material mat = Material.getMaterial(Integer.parseInt(str));
-			if (mat != null && mat.isBlock()) return mat;
-		} catch (Exception ex) {}
-		
+	static private DamageCause getType(String str) {
 		// By Name
-		Material[] types = getTypes();
+		DamageCause[] types = getTypes();
 		for (int i = 0; i < types.length; i++) {
 			if (types[i].name().equalsIgnoreCase(str)) return types[i];
 		}
@@ -86,30 +80,30 @@ public class BlockList extends ArrayList<Material> {
 			if (types[i].name().replace("_", " ").equalsIgnoreCase(str)) return types[i];
 		}
 		
-		throw new RuntimeException("Unknown block: " + str);
+		throw new RuntimeException("Unknown damage cause: " + str);
 	}
 	
 	// Get all block types via reflection
-	static private Material[] typecache = null;
+	static private DamageCause[] typecache = null;
 	
-	static private Material[] getTypes() {
+	static private DamageCause[] getTypes() {
 		if (typecache != null) return typecache;
 		
-		List<Material> materials = new ArrayList<Material>();
-		Field[] materialFields = Material.class.getFields();
+		List<DamageCause> causes = new ArrayList<DamageCause>();
+		Field[] materialFields = DamageCause.class.getFields();
 		
 		for (Field f : materialFields) {
 			try {
 				Object got = f.get(null);
-				if (got instanceof Material) {
-					if (!((Material) got).isBlock()) continue;
+				if (got instanceof DamageCause) {
+					if (got == DamageCause.CUSTOM || got == DamageCause.FIRE_TICK || got == DamageCause.VOID || got == DamageCause.SUICIDE) continue;
 					
-					materials.add((Material) f.get(null));
+					causes.add((DamageCause) f.get(null));
 				}
 			} catch (Exception ex) {}
 		}
 		
-		typecache = materials.toArray(new Material[0]);
+		typecache = causes.toArray(new DamageCause[0]);
 		return typecache;
 	}
 }

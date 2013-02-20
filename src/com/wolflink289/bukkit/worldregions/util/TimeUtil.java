@@ -13,7 +13,7 @@ public class TimeUtil {
 	 * @return a human readable time format.
 	 */
 	static public String ticksAsReadable(int ticks) {
-		int tc = (int) Math.ceil(ticks / 20d);
+		int tc = (int) Math.floor(ticks / 20d);
 		int s = tc % 60;
 		int m = ((int) Math.floor(tc / 60d)) % 60;
 		int h = (int) Math.floor(tc / 60d / 60d);

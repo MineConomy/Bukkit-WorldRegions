@@ -17,20 +17,34 @@ import com.wolflink289.bukkit.worldregions.util.RegionUtil;
 public class BlockListener implements Listener {
 	
 	/**
-	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
+	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK, INSTABREAK
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockDamage(BlockDamageEvent event) {
+		// BLOCKED-BREAK, ALLOWED-BREAK
 		if (!handleBreak(event.getPlayer(), event.getBlock())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_BREAK);
+			return;
+		}
+		
+		// INSTABREAK
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_INSTABREAK) {
+			// Isn't disabled?
+			if (!WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) {
+				// Doesn't bypass?
+				if (WGCommon.willFlagApply(event.getPlayer(), Flags.INSTABREAK)) {
+					// Instant break
+					event.setInstaBreak(true);
+				}
+			}
 		}
 	}
 	
 	/**
 	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockBreak(BlockBreakEvent event) {
 		if (!handleBreak(event.getPlayer(), event.getBlock())) {
 			event.setCancelled(true);
@@ -41,7 +55,7 @@ public class BlockListener implements Listener {
 	/**
 	 * Listener for: BLOCKED-PLACE, ALLOWED-PLACE
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (!handlePlace(event.getPlayer(), event.getBlock())) {
 			event.setCancelled(true);
@@ -54,7 +68,7 @@ public class BlockListener implements Listener {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
-			// Not allowed
+			// Bypass?
 			if (!WGCommon.willFlagApply(player, Flags.ALLOWED_BREAK)) return true;
 			
 			// Get blocked
@@ -76,7 +90,7 @@ public class BlockListener implements Listener {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
-			// Not allowed
+			// Bypass?
 			if (!WGCommon.willFlagApply(player, Flags.BLOCKED_BREAK)) return true;
 			
 			// Get blocked
@@ -99,7 +113,7 @@ public class BlockListener implements Listener {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
-			// Not allowed
+			// Bypass?
 			if (!WGCommon.willFlagApply(player, Flags.ALLOWED_PLACE)) return true;
 			
 			// Get blocked
@@ -121,7 +135,7 @@ public class BlockListener implements Listener {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
-			// Not allowed
+			// Bypass?
 			if (!WGCommon.willFlagApply(player, Flags.BLOCKED_PLACE)) return true;
 			
 			// Get blocked

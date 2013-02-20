@@ -35,12 +35,15 @@ public class WorldRegionsConfig {
 		ENABLE_PVE = cfg.getBoolean("flag.pve.enabled");
 		ENABLE_REGEN = cfg.getBoolean("flag.regen.enabled");
 		ENABLE_ZOMBIE_DOOR_BREAK = cfg.getBoolean("flag.zombie-door-break.enabled");
-		ENABLE_BLOCKED_BREAK = cfg.getBoolean("flag.blocked.break.enabled");
-		ENABLE_BLOCKED_PLACE = cfg.getBoolean("flag.blocked.place.enabled");
-		ENABLE_ALLOWED_BREAK = cfg.getBoolean("flag.allowed.break.enabled");
-		ENABLE_ALLOWED_PLACE = cfg.getBoolean("flag.allowed.place.enabled");
+		ENABLE_BLOCKED_BREAK = cfg.getBoolean("flag.blocked-break.enabled");
+		ENABLE_BLOCKED_PLACE = cfg.getBoolean("flag.blocked-place.enabled");
+		ENABLE_ALLOWED_BREAK = cfg.getBoolean("flag.allowed-break.enabled");
+		ENABLE_ALLOWED_PLACE = cfg.getBoolean("flag.allowed-place.enabled");
 		ENABLE_ITEM_PICKUP = cfg.getBoolean("flag.item-pickup.enabled");
-		FLY_MSG_SET_ALLOW = cfg.getString("message.fly.set.allow").trim().replace('&', '\247');
+		ENABLE_INSTABREAK = cfg.getBoolean("flag.instabreak.enabled");
+		ENABLE_ALLOWED_DAMAGE = cfg.getBoolean("flag.allowed-damage.enabled");
+		ENABLE_BLOCKED_DAMAGE = cfg.getBoolean("flag.blocked-damage.enabled");
+		MSG_FLY_SET_ALLOW = cfg.getString("message.fly.set.allow").trim().replace('&', '\247');
 		MSG_FLY_SET_BLOCK = cfg.getString("message.fly.set.block").trim().replace('&', '\247');
 		MSG_FLY_RESET_ALLOW = cfg.getString("message.fly.reset.allow").trim().replace('&', '\247');
 		MSG_FLY_RESET_BLOCK = cfg.getString("message.fly.reset.block").trim().replace('&', '\247');
@@ -50,13 +53,16 @@ public class WorldRegionsConfig {
 	
 	private void defaults() {
 		setDefault("flag.apply-potion.enabled", true);
-		setDefault("flag.blocked.break.enabled", true);
-		setDefault("flag.blocked.place.enabled", true);
-		setDefault("flag.allowed.break.enabled", true);
-		setDefault("flag.allowed.place.enabled", true);
+		setDefault("flag.blocked-break.enabled", true);
+		setDefault("flag.blocked-place.enabled", true);
+		setDefault("flag.blocked-damage.enabled", true);
+		setDefault("flag.allowed-break.enabled", true);
+		setDefault("flag.allowed-place.enabled", true);
+		setDefault("flag.allowed-damage.enabled", true);
 		setDefault("flag.fly.enabled", true);
 		setDefault("flag.healing.enabled", true);
 		setDefault("flag.hunger.enabled", true);
+		setDefault("flag.instabreak.enabled", true);
 		setDefault("flag.item-spawn.enabled", true);
 		setDefault("flag.item-pickup.enabled", true);
 		setDefault("flag.mob-targeting.enabled", true);
@@ -90,7 +96,10 @@ public class WorldRegionsConfig {
 	public final boolean ENABLE_ALLOWED_BREAK;
 	public final boolean ENABLE_ALLOWED_PLACE;
 	public final boolean ENABLE_ITEM_PICKUP;
-	public final String FLY_MSG_SET_ALLOW;
+	public final boolean ENABLE_INSTABREAK;
+	public final boolean ENABLE_BLOCKED_DAMAGE;
+	public final boolean ENABLE_ALLOWED_DAMAGE;
+	public final String MSG_FLY_SET_ALLOW;
 	public final String MSG_FLY_SET_BLOCK;
 	public final String MSG_FLY_RESET_ALLOW;
 	public final String MSG_FLY_RESET_BLOCK;

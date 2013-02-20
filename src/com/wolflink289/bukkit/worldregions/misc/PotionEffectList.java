@@ -57,8 +57,7 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 				if (amp < 0) continue;
 				
 				ef.add(type.createEffect((int) (dur / type.getDurationModifier()), amp));
-			} catch (Exception ex) {
-			}
+			} catch (Exception ex) {}
 		}
 		
 		if (ef.isEmpty()) return null;

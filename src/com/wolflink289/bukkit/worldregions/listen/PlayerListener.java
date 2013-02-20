@@ -1,6 +1,7 @@
 package com.wolflink289.bukkit.worldregions.listen;
 
 import java.util.List;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
+import com.wolflink289.bukkit.worldregions.misc.DamageList;
 import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
 import com.wolflink289.bukkit.worldregions.misc.PotionEffectList;
 import com.wolflink289.bukkit.worldregions.misc.WGCommon;
@@ -29,7 +31,7 @@ public class PlayerListener implements Listener {
 	/**
 	 * Listener for: HUNGER
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFoodLevelChance(FoodLevelChangeEvent event) {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HUNGER) return;
 		
@@ -50,7 +52,7 @@ public class PlayerListener implements Listener {
 	/**
 	 * Listener for: HEALING, REGEN
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFoodLevelChance(EntityRegainHealthEvent event) {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !WorldRegionsPlugin.getInstanceConfig().ENABLE_REGEN) return;
 		
@@ -79,7 +81,7 @@ public class PlayerListener implements Listener {
 	/**
 	 * Listener for: HUNGER
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHungerDamage(EntityDamageEvent event) {
 		if (event.getCause() != DamageCause.STARVATION) return;
 		if (RegionUtil.getFlag(Flags.HUNGER, event.getEntity().getLocation())) return;
@@ -173,7 +175,7 @@ public class PlayerListener implements Listener {
 						// Message
 						String msg = "";
 						if (res == StateFlag.State.ALLOW) {
-							msg = WorldRegionsPlugin.getInstanceConfig().FLY_MSG_SET_ALLOW;
+							msg = WorldRegionsPlugin.getInstanceConfig().MSG_FLY_SET_ALLOW;
 						} else {
 							msg = WorldRegionsPlugin.getInstanceConfig().MSG_FLY_SET_BLOCK;
 						}
@@ -190,7 +192,7 @@ public class PlayerListener implements Listener {
 	/**
 	 * Listener for: APPLY-POTION, FLY
 	 */
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onModeChanged(PlayerGameModeChangeEvent event) {
 		Player player = event.getPlayer();
 		
@@ -210,25 +212,99 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
-
+	
 	/**
 	 * Listener for: ITEM-PICKUP
 	 */
-	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemSpawn(PlayerPickupItemEvent event) {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_PICKUP) return;
-
+		
 		// Bypass
 		if (!WGCommon.willFlagApply((Player) event.getPlayer(), Flags.ITEM_PICKUP)) return;
 		
 		// Check if item pickup allowed
 		if (RegionUtil.getFlag(Flags.ITEM_PICKUP, event.getPlayer().getLocation())) return;
-
+		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) return;
 		
 		// Cancel event
 		event.setCancelled(true);
+	}
+	
+	/**
+	 * Listener for: ALLOWED-DAMAGE, BLOCKED-DAMAGE
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onDamage(EntityDamageEvent event) {
+		if (event.getEntityType() != EntityType.PLAYER) return;
+		
+		// BLOCKED-BREAK, ALLOWED-BREAK
+		if (!handleBreak((Player) event.getEntity(), event.getCause())) {
+			event.setCancelled(true);
+			return;
+		}
+	}
+	
+	// Entity damage stuff
+	
+	private boolean handleDamageAllowed(Player player, DamageCause type) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGCommon.willFlagApply(player, Flags.ALLOWED_DAMAGE)) {
+			// Disabled?
+			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			
+			// Bypass?
+			if (!WGCommon.willFlagApply(player, Flags.ALLOWED_DAMAGE)) return true;
+			
+			// Get blocked
+			Object blocked = RegionUtil.getFlag(Flags.ALLOWED_DAMAGE, player.getLocation());
+			if (blocked == null) return true;
+			
+			// Check
+			DamageList list = (DamageList) blocked;
+			if (list.contains(type)) return true;
+			
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private boolean handleDamageBlocked(Player player, DamageCause type) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGCommon.willFlagApply(player, Flags.BLOCKED_DAMAGE)) {
+			// Disabled?
+			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			
+			// Bypass?
+			if (!WGCommon.willFlagApply(player, Flags.BLOCKED_DAMAGE)) return true;
+			
+			// Get blocked
+			Object blocked = RegionUtil.getFlag(Flags.BLOCKED_DAMAGE, player.getLocation());
+			if (blocked == null) return true;
+			
+			// Check
+			DamageList list = (DamageList) blocked;
+			if (list.contains(type)) return false;
+			
+			return true;
+		}
+		
+		return true;
+	}
+	
+	private boolean handleBreak(Player player, DamageCause type) {
+		// Enabled?
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE) return true;
+		
+		// ALLOWED-BREAK
+		if (!handleDamageAllowed(player, type)) return false;
+		
+		// BLOCKED-BREAK
+		if (!handleDamageBlocked(player, type)) return false;
+		
+		// ...
+		return true;
 	}
 	
 	// Tick stuff
