@@ -29,7 +29,7 @@ permissions:
         default: op
     worldregions.bypass.flag.apply-potion:
         description: The player will not receive potion effects in areas where "apply-potion" is set.
-        default: true
+        default: false
     worldregions.bypass.flag.fly:
         description: The player will not be affected by the "fly" flag.
         default: false
