@@ -36,7 +36,7 @@ public class WGCommon {
 	 */
 	static public boolean willFlagApply(Player player, Flag<?> flag) {
 		// Permission?
-		if (!player.hasPermission("worldguard.region.flag.flags." + flag.getName())) return false;
+		if (player.hasPermission("worldregion.bypass.flag." + flag.getName())) return false;
 		
 		// Bypass?
 		// TODO fix: if (WorldRegionsPlugin.getWorldGuard().getGlobalRegionManager().hasBypass(player, player.getWorld())) return false;

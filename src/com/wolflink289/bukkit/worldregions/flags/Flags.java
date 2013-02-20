@@ -2,6 +2,8 @@ package com.wolflink289.bukkit.worldregions.flags;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.logging.Level;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
@@ -20,9 +22,14 @@ public final class Flags {
 	static public final StateFlag REGEN = new StateFlag("regen", true, RegionGroup.ALL);
 	static public final StateFlag HEALING = new StateFlag("healing", true, RegionGroup.ALL);
 	static public final StateFlag FLY = new StateFlag("fly", true, RegionGroup.ALL);
+	static public final StateFlag ITEM_PICKUP = new StateFlag("item-pickup", true);
 	static public final PotionEffectListFlag APPLY_POTION = new PotionEffectListFlag("apply-potion", RegionGroup.ALL);
+	static public final BlockListFlag BLOCKED_PLACE = new BlockListFlag("blocked-place", RegionGroup.ALL);
+	static public final BlockListFlag BLOCKED_BREAK = new BlockListFlag("blocked-break", RegionGroup.ALL);
+	static public final BlockListFlag ALLOWED_PLACE = new BlockListFlag("allowed-place", RegionGroup.ALL);
+	static public final BlockListFlag ALLOWED_BREAK = new BlockListFlag("allowed-break", RegionGroup.ALL);
 	
-	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY };
+	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY, BLOCKED_PLACE, BLOCKED_BREAK, ALLOWED_PLACE, ALLOWED_BREAK, ITEM_PICKUP };
 	static public final Flag<?>[] originals = DefaultFlag.getFlags();
 	
 	// Get Flags
@@ -93,6 +100,16 @@ public final class Flags {
 			for (int i = 0; i < flags.length; i++) {
 				newFlags[oldFlags.length + i] = flags[i];
 			}
+			
+			// Sort
+			Arrays.sort(newFlags, new Comparator<Flag<?>>() {
+
+				@Override
+				public int compare(Flag<?> o1, Flag<?> o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+				
+			});
 			
 			// Set: field
 			flagsList.set(null, newFlags);

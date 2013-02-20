@@ -26,35 +26,48 @@ public class WorldRegionsConfig {
 		}
 		
 		// Read
-		FLY_ENABLED = cfg.getBoolean("fly.enabled");
-		FLY_MSG_SET_ALLOW = cfg.getString("fly.message.set.allow").trim().replace('&', '\247');
-		FLY_MSG_SET_BLOCK = cfg.getString("fly.message.set.block").trim().replace('&', '\247');
-		FLY_MSG_RESET_ALLOW = cfg.getString("fly.message.reset.allow").trim().replace('&', '\247');
-		FLY_MSG_RESET_BLOCK = cfg.getString("fly.message.reset.block").trim().replace('&', '\247');
-		APPLY_POTION_ENABLED = cfg.getBoolean("apply-potion.enabled");
-		HEALING_ENABLED = cfg.getBoolean("healing.enabled");
-		HUNGER_ENABLED = cfg.getBoolean("hunger.enabled");
-		ITEM_SPAWN_ENABLED = cfg.getBoolean("item-spawn.enabled");
-		MOB_TARGETING_ENABLED = cfg.getBoolean("mob-targeting.enabled");
-		PVE_ENABLED = cfg.getBoolean("pve.enabled");
-		REGEN_ENABLED = cfg.getBoolean("regen.enabled");
-		ZOMBIE_DOOR_BREAK_ENABLED = cfg.getBoolean("zombie-door-break.enabled");
+		ENABLE_FLY = cfg.getBoolean("flag.fly.enabled");
+		ENABLE_APPLY_POTION = cfg.getBoolean("flag.apply-potion.enabled");
+		ENABLE_HEALING = cfg.getBoolean("flag.healing.enabled");
+		ENABLE_HUNGER = cfg.getBoolean("flag.hunger.enabled");
+		ENABLE_ITEM_SPAWN = cfg.getBoolean("flag.item-spawn.enabled");
+		ENABLE_MOB_TARGETING = cfg.getBoolean("flag.mob-targeting.enabled");
+		ENABLE_PVE = cfg.getBoolean("flag.pve.enabled");
+		ENABLE_REGEN = cfg.getBoolean("flag.regen.enabled");
+		ENABLE_ZOMBIE_DOOR_BREAK = cfg.getBoolean("flag.zombie-door-break.enabled");
+		ENABLE_BLOCKED_BREAK = cfg.getBoolean("flag.blocked.break.enabled");
+		ENABLE_BLOCKED_PLACE = cfg.getBoolean("flag.blocked.place.enabled");
+		ENABLE_ALLOWED_BREAK = cfg.getBoolean("flag.allowed.break.enabled");
+		ENABLE_ALLOWED_PLACE = cfg.getBoolean("flag.allowed.place.enabled");
+		ENABLE_ITEM_PICKUP = cfg.getBoolean("flag.item-pickup.enabled");
+		FLY_MSG_SET_ALLOW = cfg.getString("message.fly.set.allow").trim().replace('&', '\247');
+		MSG_FLY_SET_BLOCK = cfg.getString("message.fly.set.block").trim().replace('&', '\247');
+		MSG_FLY_RESET_ALLOW = cfg.getString("message.fly.reset.allow").trim().replace('&', '\247');
+		MSG_FLY_RESET_BLOCK = cfg.getString("message.fly.reset.block").trim().replace('&', '\247');
+		MSG_NO_BREAK = cfg.getString("message.misc.no-break").trim().replace('&', '\247');
+		MSG_NO_PLACE = cfg.getString("message.misc.no-place").trim().replace('&', '\247');
 	}
 	
 	private void defaults() {
-		setDefault("apply-potion.enabled", true);
-		setDefault("fly.enabled", true);
-		setDefault("fly.message.set.allow", "&9You are allowed to fly here.");
-		setDefault("fly.message.set.block", "&9You are not allowed to fly here.");
-		setDefault("fly.message.reset.allow", "&9You are no longer allowed to fly.");
-		setDefault("fly.message.reset.block", "&9You are now allowed to fly again.");
-		setDefault("healing.enabled", true);
-		setDefault("hunger.enabled", true);
-		setDefault("item-spawn.enabled", true);
-		setDefault("mob-targeting.enabled", true);
-		setDefault("pve.enabled", true);
-		setDefault("regen.enabled", true);
-		setDefault("zombie-door-break.enabled", true);
+		setDefault("flag.apply-potion.enabled", true);
+		setDefault("flag.blocked.break.enabled", true);
+		setDefault("flag.blocked.place.enabled", true);
+		setDefault("flag.allowed.break.enabled", true);
+		setDefault("flag.allowed.place.enabled", true);
+		setDefault("flag.fly.enabled", true);
+		setDefault("flag.healing.enabled", true);
+		setDefault("flag.hunger.enabled", true);
+		setDefault("flag.item-spawn.enabled", true);
+		setDefault("flag.item-pickup.enabled", true);
+		setDefault("flag.mob-targeting.enabled", true);
+		setDefault("flag.pve.enabled", true);
+		setDefault("flag.regen.enabled", true);
+		setDefault("flag.zombie-door-break.enabled", true);
+		setDefault("message.fly.set.allow", "&9You are allowed to fly here.");
+		setDefault("message.fly.set.block", "&9You are not allowed to fly here.");
+		setDefault("message.fly.reset.allow", "&9You are no longer allowed to fly.");
+		setDefault("message.fly.reset.block", "&9You are now allowed to fly again.");
+		setDefault("message.misc.no-place", "&cYou are not allowed to place that block!");
 	}
 	
 	private void setDefault(String name, Object value) {
@@ -63,17 +76,24 @@ public class WorldRegionsConfig {
 		}
 	}
 	
-	public final boolean FLY_ENABLED;
-	public final boolean APPLY_POTION_ENABLED;
-	public final boolean MOB_TARGETING_ENABLED;
-	public final boolean PVE_ENABLED;
-	public final boolean ITEM_SPAWN_ENABLED;
-	public final boolean HUNGER_ENABLED;
-	public final boolean REGEN_ENABLED;
-	public final boolean HEALING_ENABLED;
-	public final boolean ZOMBIE_DOOR_BREAK_ENABLED;
+	public final boolean ENABLE_FLY;
+	public final boolean ENABLE_APPLY_POTION;
+	public final boolean ENABLE_MOB_TARGETING;
+	public final boolean ENABLE_PVE;
+	public final boolean ENABLE_ITEM_SPAWN;
+	public final boolean ENABLE_HUNGER;
+	public final boolean ENABLE_REGEN;
+	public final boolean ENABLE_HEALING;
+	public final boolean ENABLE_ZOMBIE_DOOR_BREAK;
+	public final boolean ENABLE_BLOCKED_BREAK;
+	public final boolean ENABLE_BLOCKED_PLACE;
+	public final boolean ENABLE_ALLOWED_BREAK;
+	public final boolean ENABLE_ALLOWED_PLACE;
+	public final boolean ENABLE_ITEM_PICKUP;
 	public final String FLY_MSG_SET_ALLOW;
-	public final String FLY_MSG_SET_BLOCK;
-	public final String FLY_MSG_RESET_ALLOW;
-	public final String FLY_MSG_RESET_BLOCK;
+	public final String MSG_FLY_SET_BLOCK;
+	public final String MSG_FLY_RESET_ALLOW;
+	public final String MSG_FLY_RESET_BLOCK;
+	public final String MSG_NO_BREAK;
+	public final String MSG_NO_PLACE;
 }

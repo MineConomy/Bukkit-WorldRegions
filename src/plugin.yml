@@ -7,27 +7,41 @@ version: 1.0.0
 main: com.wolflink289.bukkit.worldregions.WorldRegionsPlugin
 
 depend: [WorldGuard]
-softdepend: [ProtocolLib]
 
 permissions:
-    worldguard.region.flag.flags.pve:
-        description: The player will not be allowed to attack mobs in no-PvE areas.
-        default: not op
-    worldguard.region.flag.flags.mob-targeting:
-        description: Mobs will not be allowed to attack the player in no-targeting areas.
+    worldregions.bypass.flag.pve:
+        description: The player will be allowed to attack mobs in areas where "pve" is denied.
+        default: op
+    worldregions.bypass.flag.mob-targeting:
+        description: The player will be targeted and attacked by mobs in areas where "mob-targeting" is denied.
+        default: false
+    worldregions.bypass.flag.hunger:
+        description: The player will still take damage from starvation and their hunger bar will still decrease in areas where "hunger" is denied.
+        default: false
+    worldregions.bypass.flag.regen:
+        description: The player will still regenerate health from a full hunger bar in areas where "regen" is denied.
+        default: op
+    worldregions.bypass.flag.healing:
+        description: The player will still be able to naturally heal in areas where "healing" is denied.
+        default: op
+    worldregions.bypass.flag.item-pickup:
+        description: The player will still be able to pick up items in areas where "item-pickup" is denied.
+        default: op
+    worldregions.bypass.flag.apply-potion:
+        description: The player will not receive potion effects in areas where "apply-potion" is set.
         default: true
-    worldguard.region.flag.flags.hunger:
-        description: The player's hunger will not decrease in no-hunger areas.
-        default: true
-    worldguard.region.flag.flags.regen:
-        description: The player will not regenerate health due to a full hunger bar in no-regen areas.
-        default: not op
-    worldguard.region.flag.flags.healing:
-        description: The player will not be able to heal at all in no-healing areas.
-        default: not op
-    worldguard.region.flag.flags.apply-potion:
-        description: The player will receive potion effects in apply-potion areas.
-        default: true
-    worldguard.region.flag.flags.fly:
-        description: The player will be allowed to or block from flying in areas with "fly" set.
-        default: true
+    worldregions.bypass.flag.fly:
+        description: The player will not be affected by the "fly" flag.
+        default: false
+    worldregions.bypass.flag.allowed-break:
+        description: The player will still be able to break blocks that were not whitelisted with "allowed-break".
+        default: op
+    worldregions.bypass.flag.allowed-place:
+        description: The player will still be able to place blocks that were not whitelisted with "allowed-place".
+        default: op
+    worldregions.bypass.flag.blocked-break:
+        description: The player will still be able to break blocks that were blacklisted with "blocked-break".
+        default: op
+    worldregions.bypass.flag.blocked-place:
+        description: The player will still be able to place blocks that were blacklisted with "blocked-place".
+        default: op

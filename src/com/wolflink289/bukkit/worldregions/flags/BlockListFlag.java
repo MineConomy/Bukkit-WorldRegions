@@ -7,29 +7,29 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
 import com.sk89q.worldguard.protection.flags.RegionGroup;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.PotionEffectList;
+import com.wolflink289.bukkit.worldregions.misc.BlockList;
 
 /**
- * A flag containing a list of potion effects.
+ * A flag containing a list of blocks.
  * 
  * @author Wolflink289
  */
-public class PotionEffectListFlag extends Flag<PotionEffectList> {
+public class BlockListFlag extends Flag<BlockList> {
 	
 	// Constructor
-	public PotionEffectListFlag(String name, RegionGroup defaultGroup) {
+	public BlockListFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
 	
-	public PotionEffectListFlag(String name) {
+	public BlockListFlag(String name) {
 		super(name);
 	}
 	
 	// Parsing
 	@Override
-	public PotionEffectList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
+	public BlockList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
 		try {
-			return PotionEffectList.parse(input);
+			return BlockList.parse(input);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 			throw new InvalidFlagFormat("An error occurred! Please send the developer the stack trace in the console.");
@@ -40,9 +40,9 @@ public class PotionEffectListFlag extends Flag<PotionEffectList> {
 	
 	// Marshalling
 	@Override
-	public PotionEffectList unmarshal(Object o) {
+	public BlockList unmarshal(Object o) {
 		try {
-			return PotionEffectList.unmarshal(o.toString());
+			return BlockList.unmarshal(o.toString());
 		} catch (NullPointerException ex) {
 			WorldRegionsPlugin.getInstanceLogger().log(Level.SEVERE, "An error occurred!", ex);
 			return null;
@@ -52,7 +52,7 @@ public class PotionEffectListFlag extends Flag<PotionEffectList> {
 	}
 	
 	@Override
-	public Object marshal(PotionEffectList o) {
+	public Object marshal(BlockList o) {
 		if (o == null) return "";
 		return o.toString();
 	}

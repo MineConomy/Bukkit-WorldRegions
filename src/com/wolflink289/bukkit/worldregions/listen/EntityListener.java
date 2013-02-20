@@ -18,9 +18,9 @@ import com.wolflink289.bukkit.worldregions.util.RegionUtil;
 
 public class EntityListener implements Listener {
 	
-	@EventHandler(priority = EventPriority.LOW)
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onTarget(EntityTargetEvent event) {
-		if (!WorldRegionsPlugin.getInstance().getConf().MOB_TARGETING_ENABLED) return;
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_MOB_TARGETING) return;
 		
 		// Check if player, then check if targeting allowed
 		if (!(event.getTarget() instanceof Player)) return;
@@ -29,16 +29,16 @@ public class EntityListener implements Listener {
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 
-		// Not allowed
+		// Bypass?
 		if (!WGCommon.willFlagApply((Player) event.getTarget(), Flags.MOB_TARGETING)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
 	}
-	
-	@EventHandler(priority = EventPriority.LOW)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onDamage(EntityDamageEvent event) {
-		if (!WorldRegionsPlugin.getInstance().getConf().PVE_ENABLED) return;
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_PVE) return;
 		
 		// Check cause, check if damaged by entity
 		if (event.getCause() != DamageCause.ENTITY_ATTACK) return;
@@ -56,17 +56,17 @@ public class EntityListener implements Listener {
 		if (!(event2.getDamager() instanceof Player)) return;
 		if (RegionUtil.getFlag(Flags.PVE, event2.getDamager().getLocation())) return;
 
-		// Not allowed
+		// Bypass?
 		if (!WGCommon.willFlagApply((Player) event2.getDamager(), Flags.PVE)) return;
 		
 		// Cancel event
 		((Player) event2.getDamager()).sendMessage(ChatColor.DARK_RED + "You are in a no-PvE area.");
 		event.setCancelled(true);
 	}
-	
-	@EventHandler(priority = EventPriority.LOW)
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
 	public void onDoorBreak(EntityBreakDoorEvent event) {
-		if (!WorldRegionsPlugin.getInstance().getConf().ZOMBIE_DOOR_BREAK_ENABLED) return;
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ZOMBIE_DOOR_BREAK) return;
 		
 		// Check if door breaking allowed
 		if (RegionUtil.getFlag(Flags.ZOMBIE_DOOR_BREAK, event.getEntity().getLocation())) return;
@@ -77,14 +77,14 @@ public class EntityListener implements Listener {
 		// Cancel event
 		event.setCancelled(true);
 	}
-	
-	@EventHandler(priority = EventPriority.LOW)
-	public void onItemSpawn(ItemSpawnEvent event) {
-		if (!WorldRegionsPlugin.getInstance().getConf().ITEM_SPAWN_ENABLED) return;
-		
-		// Check if door breaking allowed
-		if (RegionUtil.getFlag(Flags.ITEM_SPAWN, event.getEntity().getLocation())) return;
 
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled=true)
+	public void onItemSpawn(ItemSpawnEvent event) {
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_SPAWN) return;
+		
+		// Check if item spawning allowed
+		if (RegionUtil.getFlag(Flags.ITEM_SPAWN, event.getEntity().getLocation())) return;
+		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 		

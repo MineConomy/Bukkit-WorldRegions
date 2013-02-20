@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
+import com.wolflink289.bukkit.worldregions.listen.BlockListener;
 import com.wolflink289.bukkit.worldregions.listen.EntityListener;
 import com.wolflink289.bukkit.worldregions.listen.PlayerListener;
 import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
@@ -47,7 +48,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		return log;
 	}
 	
-	public WorldRegionsConfig getConf() {
+	static public WorldRegionsConfig getInstanceConfig() {
 		return config;
 	}
 	
@@ -79,6 +80,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		
 		getServer().getPluginManager().registerEvents(new EntityListener(), instance);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
+		getServer().getPluginManager().registerEvents(new BlockListener(), instance);
 	}
 	
 	// Listener: Plugin Disabled

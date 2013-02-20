@@ -33,7 +33,7 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 	}
 	
 	// Parse
-	static public PotionEffectList dem(String str) {
+	static public PotionEffectList unmarshal(String str) {
 		str = str.trim();
 		
 		if (str.startsWith("[")) str = str.substring(1);
@@ -58,7 +58,6 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 				
 				ef.add(type.createEffect((int) (dur / type.getDurationModifier()), amp));
 			} catch (Exception ex) {
-				ex.printStackTrace();
 			}
 		}
 		
