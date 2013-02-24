@@ -58,7 +58,7 @@ public class BlockList extends ArrayList<Material> {
 		BlockList blk = new BlockList();
 		for (int i = 0; i < blocks.length; i++) {
 			// Get data
-			blk.add(getType(blocks[0].trim()));
+			blk.add(getType(blocks[i].trim()));
 		}
 		
 		return blk;

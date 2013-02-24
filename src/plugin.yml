@@ -31,7 +31,7 @@ permissions:
         description: The player will not receive potion effects in areas where "apply-potion" is set.
         default: false
     worldregions.bypass.flag.fly:
-        description: The player will not be affected by the "fly" flag.
+        description: The player will not be affected by the "deny" state of the "fly" flag.
         default: false
     worldregions.bypass.flag.allowed-break:
         description: The player will still be able to break blocks that were not whitelisted with "allowed-break".

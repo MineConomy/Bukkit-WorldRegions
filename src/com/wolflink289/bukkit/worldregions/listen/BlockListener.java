@@ -1,5 +1,6 @@
 package com.wolflink289.bukkit.worldregions.listen;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.misc.BlockList;
@@ -34,8 +37,11 @@ public class BlockListener implements Listener {
 			if (!WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) {
 				// Doesn't bypass?
 				if (WGCommon.willFlagApply(event.getPlayer(), Flags.INSTABREAK)) {
-					// Instant break
-					event.setInstaBreak(true);
+					// Is set
+					if (RegionUtil.getFlag(Flags.INSTABREAK, event.getBlock().getLocation())) {
+						// Instant break
+						event.setInstaBreak(true);
+					}
 				}
 			}
 		}
@@ -53,10 +59,34 @@ public class BlockListener implements Listener {
 	}
 	
 	/**
+	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBlockDrain(PlayerBucketFillEvent event) {
+		if (!handleBreak(event.getPlayer(), event.getBlockClicked())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_BREAK);
+		}
+	}
+	
+	/**
+	 * Listener for: BLOCKED-PLACE, ALLOWED-PLACE
+	 */
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onBlockFill(PlayerBucketEmptyEvent event) {
+		System.out.println("!!!");
+		if (!handlePlace(event.getPlayer(), event.getBlockClicked())) {
+			event.setCancelled(true);
+			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_PLACE);
+		}
+	}
+	
+	/**
 	 * Listener for: BLOCKED-PLACE, ALLOWED-PLACE
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockPlace(BlockPlaceEvent event) {
+		System.out.println("!!!");
 		if (!handlePlace(event.getPlayer(), event.getBlock())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_PLACE);
@@ -77,7 +107,11 @@ public class BlockListener implements Listener {
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (list.contains(block.getType())) { return true; }
+			Material type = block.getType();
+			if (type == Material.STATIONARY_WATER) type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
+			
+			if (list.contains(type)) { return true; }
 			
 			return false;
 		}
@@ -95,12 +129,16 @@ public class BlockListener implements Listener {
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(Flags.BLOCKED_BREAK, block.getLocation());
-			System.out.println("Blocked Break: " + blocked);
 			if (blocked == null) return true;
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (list.contains(block.getType())) { return false; }
+			Material type = block.getType();
+			if (type == Material.STATIONARY_WATER) type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
+			
+			System.out.println(type);
+			if (list.contains(type)) { return false; }
 			
 			return true;
 		}
@@ -122,7 +160,11 @@ public class BlockListener implements Listener {
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (list.contains(block.getType())) { return true; }
+			Material type = block.getType();
+			if (type == Material.STATIONARY_WATER) type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
+			
+			if (list.contains(type)) { return true; }
 			
 			return false;
 		}
@@ -144,7 +186,11 @@ public class BlockListener implements Listener {
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (list.contains(block.getType())) { return false; }
+			Material type = block.getType();
+			if (type == Material.STATIONARY_WATER) type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
+			
+			if (list.contains(type)) { return false; }
 			
 			return true;
 		}

@@ -135,10 +135,15 @@ public class PlayerListener implements Listener {
 		}
 		
 		// FLY
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, Flags.FLY)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, null)) {
 			// Get / Check
 			Object res = RegionUtil.getFlagAsObject(Flags.FLY, event.getTo());
 			PlayerStore store = PlayerStore.get(player);
+			
+			// Bypass
+			if (player.hasPermission("worldregions.bypass.flag.fly")) {
+				if (res == StateFlag.State.DENY) return;
+			}
 			
 			// Apply
 			if (res == null && store.last_state_fly != -1) {
