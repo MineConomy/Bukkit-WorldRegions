@@ -74,6 +74,7 @@ public class WorldRegionsConfig {
 		setDefault("message.fly.reset.allow", "&9You are no longer allowed to fly.");
 		setDefault("message.fly.reset.block", "&9You are now allowed to fly again.");
 		setDefault("message.misc.no-place", "&cYou are not allowed to place that block!");
+		setDefault("message.misc.no-break", "&cYou are not allowed to break that block!");
 	}
 	
 	private void setDefault(String name, Object value) {
