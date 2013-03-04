@@ -2,6 +2,7 @@ package com.wolflink289.bukkit.worldregions.misc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
@@ -18,11 +19,16 @@ public class DamageList extends ArrayList<DamageCause> {
 	public String toString() {
 		String msd = "";
 		for (int i = 0; i < size(); i++) {
-			DamageCause block = get(i);
+			DamageCause cause = get(i);
+			String name = cause.name();
+			if (cause == DamageCause.FIRE_TICK) {
+				name = "BURNING";
+			}
+			
 			if (i == 0) {
-				msd = block.name();
+				msd = name;
 			} else {
-				msd = msd + ", " + block.name();
+				msd = msd + ", " + name;
 			}
 		}
 		
@@ -50,6 +56,12 @@ public class DamageList extends ArrayList<DamageCause> {
 	
 	static public DamageList parse(String str) {
 		if (str == null) return null;
+		if (str.equals("*")) {
+			DamageList all = new DamageList();
+			Collections.addAll(all, getTypes());
+			all.add(DamageCause.FIRE_TICK);
+			return all;
+		}
 		
 		// Split
 		str = str.trim();
@@ -66,6 +78,11 @@ public class DamageList extends ArrayList<DamageCause> {
 	
 	// Get potion effect type
 	static private DamageCause getType(String str) {
+		// Renamed
+		if (str.equalsIgnoreCase("burning")) {
+			return DamageCause.FIRE_TICK;
+		}
+		
 		// By Name
 		DamageCause[] types = getTypes();
 		for (int i = 0; i < types.length; i++) {
@@ -96,7 +113,7 @@ public class DamageList extends ArrayList<DamageCause> {
 			try {
 				Object got = f.get(null);
 				if (got instanceof DamageCause) {
-					if (got == DamageCause.CUSTOM || got == DamageCause.FIRE_TICK || got == DamageCause.VOID || got == DamageCause.SUICIDE) continue;
+					if (got == DamageCause.CUSTOM || got == DamageCause.MELTING || got == DamageCause.FIRE_TICK || got == DamageCause.VOID || got == DamageCause.SUICIDE) continue;
 					
 					causes.add((DamageCause) f.get(null));
 				}

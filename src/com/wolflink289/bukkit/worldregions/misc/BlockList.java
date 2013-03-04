@@ -2,6 +2,7 @@ package com.wolflink289.bukkit.worldregions.misc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.bukkit.Material;
 
@@ -50,6 +51,11 @@ public class BlockList extends ArrayList<Material> {
 	
 	static public BlockList parse(String str) {
 		if (str == null) return null;
+		if (str.equals("*")) {
+			BlockList all = new BlockList();
+			Collections.addAll(all, getTypes());
+			return all;
+		}
 		
 		// Split
 		str = str.trim();

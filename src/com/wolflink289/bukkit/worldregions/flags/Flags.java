@@ -23,7 +23,7 @@ public final class Flags {
 	static public final StateFlag HEALING = new StateFlag("healing", true, RegionGroup.ALL);
 	static public final StateFlag FLY = new StateFlag("fly", true, RegionGroup.ALL);
 	static public final StateFlag ITEM_PICKUP = new StateFlag("item-pickup", true, RegionGroup.ALL);
-	static public final StateFlag INSTABREAK = new StateFlag("instabreak", true, RegionGroup.ALL);
+	static public final StateFlag INSTABREAK = new StateFlag("instabreak", false, RegionGroup.ALL);
 	static public final PotionEffectListFlag APPLY_POTION = new PotionEffectListFlag("apply-potion", RegionGroup.ALL);
 	static public final BlockListFlag BLOCKED_PLACE = new BlockListFlag("blocked-place", RegionGroup.ALL);
 	static public final BlockListFlag BLOCKED_BREAK = new BlockListFlag("blocked-break", RegionGroup.ALL);

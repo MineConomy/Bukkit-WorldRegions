@@ -66,6 +66,14 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 	
 	static public PotionEffectList parse(String str) {
 		if (str == null) return null;
+		if (str.equals("*")) {
+			PotionEffectList all = new PotionEffectList();
+			PotionEffectType[] types = getTypes();
+			for (int i = 0; i < types.length; i++) {
+				all.add(types[i].createEffect(20 * 60, 0));
+			}
+			return all;
+		}
 		
 		// Split
 		str = str.trim();
