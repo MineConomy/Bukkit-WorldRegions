@@ -45,7 +45,6 @@ public class BlockList extends ArrayList<Material> {
 			} catch (Exception ex) {}
 		}
 		
-		if (blk.isEmpty()) return null;
 		return blk;
 	}
 	
@@ -55,6 +54,10 @@ public class BlockList extends ArrayList<Material> {
 			BlockList all = new BlockList();
 			Collections.addAll(all, getTypes());
 			return all;
+		}
+		
+		if (str.equals(".")) {
+			return new BlockList();
 		}
 		
 		// Split

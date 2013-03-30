@@ -60,7 +60,6 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 			} catch (Exception ex) {}
 		}
 		
-		if (ef.isEmpty()) return null;
 		return ef;
 	}
 	
@@ -73,6 +72,9 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 				all.add(types[i].createEffect(20 * 60, 0));
 			}
 			return all;
+		}
+		if (str.equals(".")) {
+			return new PotionEffectList();
 		}
 		
 		// Split

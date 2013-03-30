@@ -50,7 +50,6 @@ public class DamageList extends ArrayList<DamageCause> {
 			} catch (Exception ex) {}
 		}
 		
-		if (dmg.isEmpty()) return null;
 		return dmg;
 	}
 	
@@ -61,6 +60,9 @@ public class DamageList extends ArrayList<DamageCause> {
 			Collections.addAll(all, getTypes());
 			all.add(DamageCause.FIRE_TICK);
 			return all;
+		}
+		if (str.equals(".")) {
+			return new DamageList();
 		}
 		
 		// Split
