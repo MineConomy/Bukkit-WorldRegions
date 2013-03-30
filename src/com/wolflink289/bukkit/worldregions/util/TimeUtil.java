@@ -105,6 +105,7 @@ public class TimeUtil {
 			if (hours < 1 || hours > 12) throw new NumberFormatException("Hours in 12-hour time range from 1 to 12");
 			if (mins < 0 || mins > 59) throw new NumberFormatException("Minutes range from 0 to 59");
 			
+			if (hours == 12) pm = !pm;
 			if (pm) hours += 12;
 			
 			return (hours * 1000) + (1000 / 60 * mins);
