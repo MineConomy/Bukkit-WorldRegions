@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.listen.BlockListener;
 import com.wolflink289.bukkit.worldregions.listen.EntityListener;
 import com.wolflink289.bukkit.worldregions.listen.PlayerListener;
@@ -63,7 +62,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 		log = getLogger();
 		
 		// Inject flags
-		Flags.inject();
+		WorldRegionsFlags.inject();
 		
 		// Set loaded
 		loaded = true;
@@ -86,7 +85,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	// Listener: Plugin Disabled
 	@Override
 	public void onDisable() {
-		Flags.release();
+		WorldRegionsFlags.release();
 		
 		// Reset
 		List<PlayerStore> stores = PlayerStore.all();

@@ -16,8 +16,8 @@ import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.potion.PotionEffect;
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.wolflink289.bukkit.worldregions.WorldRegionsFlags;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.flags.Flags;
 import com.wolflink289.bukkit.worldregions.misc.DamageList;
 import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
 import com.wolflink289.bukkit.worldregions.misc.PotionEffectList;
@@ -36,14 +36,14 @@ public class PlayerListener implements Listener {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HUNGER) return;
 		
 		if (!(event.getEntity() instanceof Player)) return;
-		if (RegionUtil.getFlag(Flags.HUNGER, event.getEntity().getLocation())) return;
+		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation())) return;
 		if (((Player) event.getEntity()).getFoodLevel() < event.getFoodLevel()) return;
 		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event.getEntity(), Flags.HUNGER)) return;
+		if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -61,17 +61,17 @@ public class PlayerListener implements Listener {
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !RegionUtil.getFlag(Flags.HEALING, event.getEntity().getLocation())) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !RegionUtil.getFlag(WorldRegionsFlags.HEALING, event.getEntity().getLocation())) {
 			// Bypass?
-			if (!WGCommon.willFlagApply((Player) event.getEntity(), Flags.HEALING)) return;
+			if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HEALING)) return;
 			
 			// Cancel event
 			event.setCancelled(true);
 		} else if (WorldRegionsPlugin.getInstanceConfig().ENABLE_REGEN && event.getRegainReason() == RegainReason.SATIATED) {
-			if (RegionUtil.getFlag(Flags.REGEN, event.getEntity().getLocation())) return;
+			if (RegionUtil.getFlag(WorldRegionsFlags.REGEN, event.getEntity().getLocation())) return;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply((Player) event.getEntity(), Flags.REGEN)) return;
+			if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.REGEN)) return;
 			
 			// Cancel event
 			event.setCancelled(true);
@@ -84,13 +84,13 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHungerDamage(EntityDamageEvent event) {
 		if (event.getCause() != DamageCause.STARVATION) return;
-		if (RegionUtil.getFlag(Flags.HUNGER, event.getEntity().getLocation())) return;
+		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation())) return;
 		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event.getEntity(), Flags.HUNGER)) return;
+		if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -109,10 +109,10 @@ public class PlayerListener implements Listener {
 		
 		
 		// APPLY-POTION
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION && WGCommon.willFlagApply(player, Flags.APPLY_POTION)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION && WGCommon.willFlagApply(player, WorldRegionsFlags.APPLY_POTION)) {
 			
 			// Get / Check
-			Object res = RegionUtil.getFlag(Flags.APPLY_POTION, event.getTo());
+			Object res = RegionUtil.getFlag(WorldRegionsFlags.APPLY_POTION, event.getTo());
 			if (res != null) {
 				
 				// Apply
@@ -134,10 +134,34 @@ public class PlayerListener implements Listener {
 			}
 		}
 		
+		// TIME
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_TIME && WGCommon.willFlagApply(player, WorldRegionsFlags.TIME)) {
+			// Get / Check
+			Object res = RegionUtil.getFlag(WorldRegionsFlags.TIME, event.getTo());
+			if (res != null) {
+				
+				// Apply
+				PlayerStore store = PlayerStore.get(player);
+				store.time = (Integer) res;
+				player.setPlayerTime(store.time + 18000, false);
+
+				// Start?
+				if (!timedtask) {
+					timedtask = true;
+					WorldRegionsPlugin.getInstance().getServer().getScheduler().scheduleSyncRepeatingTask(WorldRegionsPlugin.getInstance(), new Runnable() {
+						@Override
+						public void run() {
+							onTick();
+						}
+					}, 1, 1);
+				}
+			}
+		}
+		
 		// FLY
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, null)) {
 			// Get / Check
-			Object res = RegionUtil.getFlagAsObject(Flags.FLY, event.getTo());
+			Object res = RegionUtil.getFlagAsObject(WorldRegionsFlags.FLY, event.getTo());
 			PlayerStore store = PlayerStore.get(player);
 			
 			// Bypass
@@ -202,7 +226,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// FLY
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, Flags.FLY)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, WorldRegionsFlags.FLY)) {
 			// Get / Check
 			PlayerStore store = PlayerStore.get(player);
 			
@@ -226,10 +250,10 @@ public class PlayerListener implements Listener {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_PICKUP) return;
 		
 		// Bypass
-		if (!WGCommon.willFlagApply((Player) event.getPlayer(), Flags.ITEM_PICKUP)) return;
+		if (!WGCommon.willFlagApply((Player) event.getPlayer(), WorldRegionsFlags.ITEM_PICKUP)) return;
 		
 		// Check if item pickup allowed
-		if (RegionUtil.getFlag(Flags.ITEM_PICKUP, event.getPlayer().getLocation())) return;
+		if (RegionUtil.getFlag(WorldRegionsFlags.ITEM_PICKUP, event.getPlayer().getLocation())) return;
 		
 		// Disabled?
 		if (WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) return;
@@ -255,15 +279,15 @@ public class PlayerListener implements Listener {
 	// Entity damage stuff
 	
 	private boolean handleDamageAllowed(Player player, DamageCause type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGCommon.willFlagApply(player, Flags.ALLOWED_DAMAGE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, Flags.ALLOWED_DAMAGE)) return true;
+			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) return true;
 			
 			// Get blocked
-			Object blocked = RegionUtil.getFlag(Flags.ALLOWED_DAMAGE, player.getLocation());
+			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_DAMAGE, player.getLocation());
 			if (blocked == null) return true;
 			
 			// Check
@@ -277,15 +301,15 @@ public class PlayerListener implements Listener {
 	}
 	
 	private boolean handleDamageBlocked(Player player, DamageCause type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGCommon.willFlagApply(player, Flags.BLOCKED_DAMAGE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, Flags.BLOCKED_DAMAGE)) return true;
+			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) return true;
 			
 			// Get blocked
-			Object blocked = RegionUtil.getFlag(Flags.BLOCKED_DAMAGE, player.getLocation());
+			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_DAMAGE, player.getLocation());
 			if (blocked == null) return true;
 			
 			// Check
@@ -320,7 +344,7 @@ public class PlayerListener implements Listener {
 	 */
 	private void onTick() {
 		counter++;
-		if (counter > 19) counter = 0;
+		if (counter > 250 * 19) counter = 0;
 		
 		// Every 19 ticks
 		if (counter % 19 == 0) {
@@ -344,6 +368,21 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
+		
+		// Every 250 ticks
+		if (counter % 250 == 0) {
+			List<PlayerStore> stores = PlayerStore.all();
+			
+			for (int i = 0; i < stores.size(); i++) {
+				PlayerStore store = stores.get(i);
+				Player player = store.getPlayer();
+				
+				// TIME
+				if (store.time != null) {
+					player.setPlayerTime(store.time + 18000, false);
+				}
+			}
+		}
 	}
 	
 	/**
@@ -354,11 +393,20 @@ public class PlayerListener implements Listener {
 		store.last_location = player.getLocation().clone();
 		
 		// APPLY-POTION
-		Object res = RegionUtil.getFlag(Flags.APPLY_POTION, player.getLocation());
+		Object res = RegionUtil.getFlag(WorldRegionsFlags.APPLY_POTION, player.getLocation());
 		if (res == null) {
 			store.effects = null;
 		} else {
 			store.effects = (PotionEffectList) res;
+		}
+		
+		// TIME
+		res = RegionUtil.getFlag(WorldRegionsFlags.TIME, player.getLocation());
+		if (res == null) {
+			store.time = null;
+			player.resetPlayerTime();
+		} else {
+			store.time = (Integer) res;
 		}
 	}
 }

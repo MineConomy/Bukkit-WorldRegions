@@ -105,4 +105,5 @@ public class PlayerStore {
 	public byte last_state_fly = (byte) -1;
 	public Location last_location = null;
 	public PotionEffectList effects = null;
+	public Integer time = null;
 }

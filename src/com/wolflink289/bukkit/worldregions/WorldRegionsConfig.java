@@ -43,6 +43,7 @@ public class WorldRegionsConfig {
 		ENABLE_INSTABREAK = cfg.getBoolean("flag.instabreak.enabled");
 		ENABLE_ALLOWED_DAMAGE = cfg.getBoolean("flag.allowed-damage.enabled");
 		ENABLE_BLOCKED_DAMAGE = cfg.getBoolean("flag.blocked-damage.enabled");
+		ENABLE_TIME = cfg.getBoolean("flag.time.enabled");
 		MSG_FLY_SET_ALLOW = cfg.getString("message.fly.set.allow").trim().replace('&', '\247');
 		MSG_FLY_SET_BLOCK = cfg.getString("message.fly.set.block").trim().replace('&', '\247');
 		MSG_FLY_RESET_ALLOW = cfg.getString("message.fly.reset.allow").trim().replace('&', '\247');
@@ -68,6 +69,7 @@ public class WorldRegionsConfig {
 		setDefault("flag.mob-targeting.enabled", true);
 		setDefault("flag.pve.enabled", true);
 		setDefault("flag.regen.enabled", true);
+		setDefault("flag.time.enabled", true);
 		setDefault("flag.zombie-door-break.enabled", true);
 		setDefault("message.fly.set.allow", "&9You are allowed to fly here.");
 		setDefault("message.fly.set.block", "&9You are not allowed to fly here.");
@@ -100,6 +102,7 @@ public class WorldRegionsConfig {
 	public final boolean ENABLE_INSTABREAK;
 	public final boolean ENABLE_BLOCKED_DAMAGE;
 	public final boolean ENABLE_ALLOWED_DAMAGE;
+	public final boolean ENABLE_TIME;
 	public final String MSG_FLY_SET_ALLOW;
 	public final String MSG_FLY_SET_BLOCK;
 	public final String MSG_FLY_RESET_ALLOW;

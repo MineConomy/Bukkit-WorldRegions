@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.flags;
+package com.wolflink289.bukkit.worldregions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -9,9 +9,12 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.RegionGroup;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
+import com.wolflink289.bukkit.worldregions.flags.BlockListFlag;
+import com.wolflink289.bukkit.worldregions.flags.DamageListFlag;
+import com.wolflink289.bukkit.worldregions.flags.PotionEffectListFlag;
+import com.wolflink289.bukkit.worldregions.flags.TimeFlag;
 
-public final class Flags {
+public final class WorldRegionsFlags {
 	
 	// Flags
 	static public final StateFlag PVE = new StateFlag("pve", true, RegionGroup.ALL);
@@ -31,8 +34,9 @@ public final class Flags {
 	static public final BlockListFlag ALLOWED_BREAK = new BlockListFlag("allowed-break", RegionGroup.ALL);
 	static public final DamageListFlag BLOCKED_DAMAGE = new DamageListFlag("blocked-damage", RegionGroup.ALL);
 	static public final DamageListFlag ALLOWED_DAMAGE = new DamageListFlag("allowed-damage", RegionGroup.ALL);
+	static public final TimeFlag TIME = new TimeFlag("time", RegionGroup.ALL);
 	
-	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY, BLOCKED_PLACE, BLOCKED_BREAK, ALLOWED_PLACE, ALLOWED_BREAK, ITEM_PICKUP, INSTABREAK, ALLOWED_DAMAGE, BLOCKED_DAMAGE };
+	static public final Flag<?>[] defaults = new Flag<?>[] { PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY, BLOCKED_PLACE, BLOCKED_BREAK, ALLOWED_PLACE, ALLOWED_BREAK, ITEM_PICKUP, INSTABREAK, ALLOWED_DAMAGE, BLOCKED_DAMAGE, TIME };
 	static public final Flag<?>[] originals = DefaultFlag.getFlags();
 	
 	// Get Flags

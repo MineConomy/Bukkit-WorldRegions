@@ -54,3 +54,6 @@ permissions:
     worldregions.bypass.flag.instabreak:
         description: The player will not be able to instantly break blocks in areas with "instabreak" allowed.
         default: false
+    worldregions.bypass.flag.time:
+        description: The player will not have their time changed in areas with "time" set.
+        default: false

@@ -23,9 +23,9 @@ public class PotionEffectList extends ArrayList<PotionEffect> {
 			PotionEffect effect = get(i);
 			
 			if (i == 0) {
-				msd = effect.getType().getName() + " " + effect.getAmplifier() + " (" + TimeUtil.ticksAsReadable(effect.getDuration()) + ")";
+				msd = effect.getType().getName() + " " + (effect.getAmplifier() + 1) + " (" + TimeUtil.ticksAsReadable(effect.getDuration()) + ")";
 			} else {
-				msd = msd + ", " + effect.getType().getName().trim() + " " + effect.getAmplifier() + " (" + TimeUtil.ticksAsReadable(effect.getDuration()) + ")";
+				msd = msd + ", " + effect.getType().getName().trim() + " " + (effect.getAmplifier() + 1) + " (" + TimeUtil.ticksAsReadable(effect.getDuration()) + ")";
 			}
 		}
 		
