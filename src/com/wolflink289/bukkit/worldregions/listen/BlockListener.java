@@ -66,6 +66,7 @@ public class BlockListener implements Listener {
 		if (!handleBreak(event.getPlayer(), event.getBlockClicked())) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_BREAK);
+			event.getPlayer().sendBlockChange(event.getBlockClicked().getLocation(), event.getBlockClicked().getType(), event.getBlockClicked().getData());
 		}
 	}
 	
@@ -74,7 +75,7 @@ public class BlockListener implements Listener {
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockFill(PlayerBucketEmptyEvent event) {
-		if (!handlePlace(event.getPlayer(), event.getBlockClicked())) {
+		if (!handlePlace(event.getPlayer(), event.getBlockClicked().getWorld().getBlockAt(event.getBlockClicked().getLocation().add(event.getBlockFace().getModX(), event.getBlockFace().getModY(), event.getBlockFace().getModZ())), Material.WATER)) {
 			event.setCancelled(true);
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_PLACE);
 		}
@@ -135,7 +136,6 @@ public class BlockListener implements Listener {
 			if (type == Material.STATIONARY_WATER) type = Material.WATER;
 			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
 			
-			System.out.println(type);
 			if (list.contains(type)) { return false; }
 			
 			return true;
@@ -144,7 +144,7 @@ public class BlockListener implements Listener {
 		return true;
 	}
 	
-	private boolean handlePlaceAllowed(Player player, Block block) {
+	private boolean handlePlaceAllowed(Player player, Block block, Material type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
@@ -158,7 +158,6 @@ public class BlockListener implements Listener {
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			Material type = block.getType();
 			if (type == Material.STATIONARY_WATER) type = Material.WATER;
 			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
 			
@@ -170,7 +169,7 @@ public class BlockListener implements Listener {
 		return true;
 	}
 	
-	private boolean handlePlaceBlocked(Player player, Block block) {
+	private boolean handlePlaceBlocked(Player player, Block block, Material type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE && WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) {
 			// Disabled?
 			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
@@ -184,7 +183,6 @@ public class BlockListener implements Listener {
 			
 			// Check
 			BlockList list = (BlockList) blocked;
-			Material type = block.getType();
 			if (type == Material.STATIONARY_WATER) type = Material.WATER;
 			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
 			
@@ -211,14 +209,18 @@ public class BlockListener implements Listener {
 	}
 	
 	private boolean handlePlace(Player player, Block block) {
+		return handlePlace(player, block, block.getType());
+	}
+	
+	private boolean handlePlace(Player player, Block block, Material type) {
 		// Enabled?
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE) return true;
 		
 		// ALLOWED-PLACE
-		if (!handlePlaceAllowed(player, block)) return false;
+		if (!handlePlaceAllowed(player, block, type)) return false;
 		
 		// BLOCKED-PLACE
-		if (!handlePlaceBlocked(player, block)) return false;
+		if (!handlePlaceBlocked(player, block, type)) return false;
 		
 		// ...
 		return true;
