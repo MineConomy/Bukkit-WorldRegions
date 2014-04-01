@@ -72,7 +72,7 @@ public class DamageList extends ArrayList<DamageCause> {
 		DamageList dmg = new DamageList();
 		for (int i = 0; i < blocks.length; i++) {
 			// Get data
-			dmg.add(getType(blocks[0].trim()));
+			dmg.add(getType(blocks[i].trim()));
 		}
 		
 		return dmg;
