@@ -1,7 +1,7 @@
 name: WorldRegions
 description: Add more flags and features to WorldGuard regions.
-author: Wolflink289
-website: http://dev.bukkit.org/server-mods/worldregions/
+author: TheBinaryFox
+website: http://dev.bukkit.org/bukkit-plugins/worldregions/
 
 version: 1.0.1
 main: com.thebinaryfox.worldregions.WorldRegionsPlugin
