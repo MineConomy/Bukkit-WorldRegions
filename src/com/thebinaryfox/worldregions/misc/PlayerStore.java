@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.misc;
+package com.thebinaryfox.worldregions.misc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
 
 /**
  * WorldRegions player information storage utility.

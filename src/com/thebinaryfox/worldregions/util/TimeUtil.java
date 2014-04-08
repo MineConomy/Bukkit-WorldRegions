@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.util;
+package com.thebinaryfox.worldregions.util;
 
 public class TimeUtil {
 	

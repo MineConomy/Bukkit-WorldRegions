@@ -1,6 +1,7 @@
-package com.wolflink289.bukkit.worldregions.listen;
+package com.thebinaryfox.worldregions.listen;
 
 import java.util.List;
+
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,14 +16,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.potion.PotionEffect;
+
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.wolflink289.bukkit.worldregions.WorldRegionsFlags;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.DamageList;
-import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
-import com.wolflink289.bukkit.worldregions.misc.PotionEffectList;
-import com.wolflink289.bukkit.worldregions.misc.WGCommon;
-import com.wolflink289.bukkit.worldregions.util.RegionUtil;
+import com.thebinaryfox.worldregions.WorldRegionsFlags;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.misc.DamageList;
+import com.thebinaryfox.worldregions.misc.PlayerStore;
+import com.thebinaryfox.worldregions.misc.PotionEffectList;
+import com.thebinaryfox.worldregions.util.RegionUtil;
+import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class PlayerListener implements Listener {
 	
@@ -40,10 +42,10 @@ public class PlayerListener implements Listener {
 		if (((Player) event.getEntity()).getFoodLevel() < event.getFoodLevel()) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
+		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -59,11 +61,11 @@ public class PlayerListener implements Listener {
 		if (!(event.getEntity() instanceof Player)) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !RegionUtil.getFlag(WorldRegionsFlags.HEALING, event.getEntity().getLocation())) {
 			// Bypass?
-			if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HEALING)) return;
+			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HEALING)) return;
 			
 			// Cancel event
 			event.setCancelled(true);
@@ -71,7 +73,7 @@ public class PlayerListener implements Listener {
 			if (RegionUtil.getFlag(WorldRegionsFlags.REGEN, event.getEntity().getLocation())) return;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.REGEN)) return;
+			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.REGEN)) return;
 			
 			// Cancel event
 			event.setCancelled(true);
@@ -87,10 +89,10 @@ public class PlayerListener implements Listener {
 		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation())) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
+		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -104,12 +106,12 @@ public class PlayerListener implements Listener {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && !WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getTo().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getTo().getWorld())) return;
 		Player player = event.getPlayer();
 		
 		
 		// APPLY-POTION
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION && WGCommon.willFlagApply(player, WorldRegionsFlags.APPLY_POTION)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION && WGUtil.willFlagApply(player, WorldRegionsFlags.APPLY_POTION)) {
 			
 			// Get / Check
 			Object res = RegionUtil.getFlag(WorldRegionsFlags.APPLY_POTION, event.getTo());
@@ -135,7 +137,7 @@ public class PlayerListener implements Listener {
 		}
 		
 		// TIME
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_TIME && WGCommon.willFlagApply(player, WorldRegionsFlags.TIME)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_TIME && WGUtil.willFlagApply(player, WorldRegionsFlags.TIME)) {
 			// Get / Check
 			Object res = RegionUtil.getFlag(WorldRegionsFlags.TIME, event.getTo());
 			if (res != null) {
@@ -159,7 +161,7 @@ public class PlayerListener implements Listener {
 		}
 		
 		// FLY
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, null)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGUtil.willFlagApply(player, null)) {
 			// Get / Check
 			Object res = RegionUtil.getFlagAsObject(WorldRegionsFlags.FLY, event.getTo());
 			PlayerStore store = PlayerStore.get(player);
@@ -226,7 +228,7 @@ public class PlayerListener implements Listener {
 		Player player = event.getPlayer();
 		
 		// FLY
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGCommon.willFlagApply(player, WorldRegionsFlags.FLY)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGUtil.willFlagApply(player, WorldRegionsFlags.FLY)) {
 			// Get / Check
 			PlayerStore store = PlayerStore.get(player);
 			
@@ -250,13 +252,13 @@ public class PlayerListener implements Listener {
 		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_PICKUP) return;
 		
 		// Bypass
-		if (!WGCommon.willFlagApply((Player) event.getPlayer(), WorldRegionsFlags.ITEM_PICKUP)) return;
+		if (!WGUtil.willFlagApply((Player) event.getPlayer(), WorldRegionsFlags.ITEM_PICKUP)) return;
 		
 		// Check if item pickup allowed
 		if (RegionUtil.getFlag(WorldRegionsFlags.ITEM_PICKUP, event.getPlayer().getLocation())) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getPlayer().getWorld())) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -279,12 +281,12 @@ public class PlayerListener implements Listener {
 	// Entity damage stuff
 	
 	private boolean handleDamageAllowed(Player player, DamageCause type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_DAMAGE, player.getLocation());
@@ -301,12 +303,12 @@ public class PlayerListener implements Listener {
 	}
 	
 	private boolean handleDamageBlocked(Player player, DamageCause type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_DAMAGE, player.getLocation());

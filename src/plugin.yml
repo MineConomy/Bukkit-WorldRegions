@@ -4,7 +4,7 @@ author: Wolflink289
 website: http://dev.bukkit.org/server-mods/worldregions/
 
 version: 1.0.1
-main: com.wolflink289.bukkit.worldregions.WorldRegionsPlugin
+main: com.thebinaryfox.worldregions.WorldRegionsPlugin
 
 depend: [WorldGuard]
 

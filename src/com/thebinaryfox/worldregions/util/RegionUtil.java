@@ -1,12 +1,13 @@
-package com.wolflink289.bukkit.worldregions.util;
+package com.thebinaryfox.worldregions.util;
 
 import org.bukkit.Location;
+
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.IntegerFlag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
 
 public class RegionUtil {
 	

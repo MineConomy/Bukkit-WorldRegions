@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.listen;
+package com.thebinaryfox.worldregions.listen;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,10 +11,11 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
-import com.wolflink289.bukkit.worldregions.WorldRegionsFlags;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.WGCommon;
-import com.wolflink289.bukkit.worldregions.util.RegionUtil;
+
+import com.thebinaryfox.worldregions.WorldRegionsFlags;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.util.RegionUtil;
+import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class EntityListener implements Listener {
 	
@@ -27,10 +28,10 @@ public class EntityListener implements Listener {
 		if (RegionUtil.getFlag(WorldRegionsFlags.MOB_TARGETING, event.getTarget().getLocation())) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event.getTarget(), WorldRegionsFlags.MOB_TARGETING)) return;
+		if (!WGUtil.willFlagApply((Player) event.getTarget(), WorldRegionsFlags.MOB_TARGETING)) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -48,7 +49,7 @@ public class EntityListener implements Listener {
 		if (event.getEntity() instanceof Player) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Check if damaged by player
 		EntityDamageByEntityEvent event2 = (EntityDamageByEntityEvent) event;
@@ -57,7 +58,7 @@ public class EntityListener implements Listener {
 		if (RegionUtil.getFlag(WorldRegionsFlags.PVE, event2.getDamager().getLocation())) return;
 		
 		// Bypass?
-		if (!WGCommon.willFlagApply((Player) event2.getDamager(), WorldRegionsFlags.PVE)) return;
+		if (!WGUtil.willFlagApply((Player) event2.getDamager(), WorldRegionsFlags.PVE)) return;
 		
 		// Cancel event
 		((Player) event2.getDamager()).sendMessage(ChatColor.DARK_RED + "You are in a no-PvE area.");
@@ -72,7 +73,7 @@ public class EntityListener implements Listener {
 		if (RegionUtil.getFlag(WorldRegionsFlags.ZOMBIE_DOOR_BREAK, event.getEntity().getLocation())) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Cancel event
 		event.setCancelled(true);
@@ -86,7 +87,7 @@ public class EntityListener implements Listener {
 		if (RegionUtil.getFlag(WorldRegionsFlags.ITEM_SPAWN, event.getEntity().getLocation())) return;
 		
 		// Disabled?
-		if (WGCommon.areRegionsDisabled(event.getEntity().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
 		
 		// Cancel event
 		event.setCancelled(true);

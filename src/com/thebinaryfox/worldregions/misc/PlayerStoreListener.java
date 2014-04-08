@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.misc;
+package com.thebinaryfox.worldregions.misc;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

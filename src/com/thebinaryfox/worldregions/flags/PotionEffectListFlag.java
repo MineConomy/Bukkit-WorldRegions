@@ -1,35 +1,37 @@
-package com.wolflink289.bukkit.worldregions.flags;
+package com.thebinaryfox.worldregions.flags;
 
 import java.util.logging.Level;
+
 import org.bukkit.command.CommandSender;
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
 import com.sk89q.worldguard.protection.flags.RegionGroup;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.BlockList;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.misc.PotionEffectList;
 
 /**
- * A flag containing a list of blocks.
+ * A flag containing a list of potion effects.
  * 
  * @author Wolflink289
  */
-public class ItemListFlag extends Flag<BlockList> {
+public class PotionEffectListFlag extends Flag<PotionEffectList> {
 	
 	// Constructor
-	public ItemListFlag(String name, RegionGroup defaultGroup) {
+	public PotionEffectListFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
 	
-	public ItemListFlag(String name) {
+	public PotionEffectListFlag(String name) {
 		super(name);
 	}
 	
 	// Parsing
 	@Override
-	public BlockList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
+	public PotionEffectList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
 		try {
-			return BlockList.parse(input);
+			return PotionEffectList.parse(input);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 			throw new InvalidFlagFormat("An error occurred! Please send the developer the stack trace in the console.");
@@ -40,9 +42,9 @@ public class ItemListFlag extends Flag<BlockList> {
 	
 	// Marshalling
 	@Override
-	public BlockList unmarshal(Object o) {
+	public PotionEffectList unmarshal(Object o) {
 		try {
-			return BlockList.unmarshal(o.toString());
+			return PotionEffectList.unmarshal(o.toString());
 		} catch (NullPointerException ex) {
 			WorldRegionsPlugin.getInstanceLogger().log(Level.SEVERE, "An error occurred!", ex);
 			return null;
@@ -52,7 +54,7 @@ public class ItemListFlag extends Flag<BlockList> {
 	}
 	
 	@Override
-	public Object marshal(BlockList o) {
+	public Object marshal(PotionEffectList o) {
 		if (o == null) return "";
 		return o.toString();
 	}

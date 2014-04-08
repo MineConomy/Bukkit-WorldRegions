@@ -1,11 +1,13 @@
-package com.wolflink289.bukkit.worldregions.misc;
+package com.thebinaryfox.worldregions.misc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import com.wolflink289.bukkit.worldregions.util.TimeUtil;
+
+import com.thebinaryfox.worldregions.util.TimeUtil;
 
 /**
  * The array list used in the PotionEffectListFlag flag type.

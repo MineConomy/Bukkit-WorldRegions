@@ -1,18 +1,19 @@
-package com.wolflink289.bukkit.worldregions.misc;
+package com.thebinaryfox.worldregions.util;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+
 import com.sk89q.worldguard.bukkit.ConfigurationManager;
 import com.sk89q.worldguard.bukkit.WorldConfiguration;
 import com.sk89q.worldguard.protection.flags.Flag;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
 
 /**
  * Common WorldGuard flag checks.
  * 
  * @author Wolflink289
  */
-public class WGCommon {
+public class WGUtil {
 	
 	/**
 	 * Are regions diabled for the specified world?

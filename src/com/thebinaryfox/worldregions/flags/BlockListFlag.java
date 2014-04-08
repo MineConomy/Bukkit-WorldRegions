@@ -1,13 +1,15 @@
-package com.wolflink289.bukkit.worldregions.flags;
+package com.thebinaryfox.worldregions.flags;
 
 import java.util.logging.Level;
+
 import org.bukkit.command.CommandSender;
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.InvalidFlagFormat;
 import com.sk89q.worldguard.protection.flags.RegionGroup;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.BlockList;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.misc.BlockList;
 
 /**
  * A flag containing a list of blocks.

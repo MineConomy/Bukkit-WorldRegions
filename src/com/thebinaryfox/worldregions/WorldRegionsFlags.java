@@ -1,18 +1,19 @@
-package com.wolflink289.bukkit.worldregions;
+package com.thebinaryfox.worldregions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.logging.Level;
+
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.RegionGroup;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.wolflink289.bukkit.worldregions.flags.BlockListFlag;
-import com.wolflink289.bukkit.worldregions.flags.DamageListFlag;
-import com.wolflink289.bukkit.worldregions.flags.PotionEffectListFlag;
-import com.wolflink289.bukkit.worldregions.flags.TimeFlag;
+import com.thebinaryfox.worldregions.flags.BlockListFlag;
+import com.thebinaryfox.worldregions.flags.DamageListFlag;
+import com.thebinaryfox.worldregions.flags.PotionEffectListFlag;
+import com.thebinaryfox.worldregions.flags.TimeFlag;
 
 public final class WorldRegionsFlags {
 	

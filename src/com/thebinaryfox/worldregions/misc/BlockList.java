@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.misc;
+package com.thebinaryfox.worldregions.misc;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

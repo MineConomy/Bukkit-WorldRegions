@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions;
+package com.thebinaryfox.worldregions;
 
 import java.io.File;
 import org.bukkit.configuration.file.YamlConfiguration;

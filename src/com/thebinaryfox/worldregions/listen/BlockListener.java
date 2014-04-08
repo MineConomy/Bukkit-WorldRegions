@@ -1,4 +1,4 @@
-package com.wolflink289.bukkit.worldregions.listen;
+package com.thebinaryfox.worldregions.listen;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,11 +12,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 
-import com.wolflink289.bukkit.worldregions.WorldRegionsFlags;
-import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
-import com.wolflink289.bukkit.worldregions.misc.BlockList;
-import com.wolflink289.bukkit.worldregions.misc.WGCommon;
-import com.wolflink289.bukkit.worldregions.util.RegionUtil;
+import com.thebinaryfox.worldregions.WorldRegionsFlags;
+import com.thebinaryfox.worldregions.WorldRegionsPlugin;
+import com.thebinaryfox.worldregions.misc.BlockList;
+import com.thebinaryfox.worldregions.util.RegionUtil;
+import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class BlockListener implements Listener {
 	
@@ -35,9 +35,9 @@ public class BlockListener implements Listener {
 		// INSTABREAK
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_INSTABREAK) {
 			// Isn't disabled?
-			if (!WGCommon.areRegionsDisabled(event.getPlayer().getWorld())) {
+			if (!WGUtil.areRegionsDisabled(event.getPlayer().getWorld())) {
 				// Doesn't bypass?
-				if (WGCommon.willFlagApply(event.getPlayer(), WorldRegionsFlags.INSTABREAK)) {
+				if (WGUtil.willFlagApply(event.getPlayer(), WorldRegionsFlags.INSTABREAK)) {
 					// Is set
 					if (RegionUtil.getFlag(WorldRegionsFlags.INSTABREAK, event.getBlock().getLocation())) {
 						// Instant break
@@ -95,12 +95,12 @@ public class BlockListener implements Listener {
 	}
 	
 	private boolean handleBreakAllowed(Player player, Block block) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_BREAK && WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_BREAK && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_BREAK, block.getLocation());
@@ -121,12 +121,12 @@ public class BlockListener implements Listener {
 	}
 	
 	private boolean handleBreakBlocked(Player player, Block block) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_BREAK && WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_BREAK && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_BREAK, block.getLocation());
@@ -147,12 +147,12 @@ public class BlockListener implements Listener {
 	}
 	
 	private boolean handlePlaceAllowed(Player player, Block block, Material type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_PLACE, block.getLocation());
@@ -172,12 +172,12 @@ public class BlockListener implements Listener {
 	}
 	
 	private boolean handlePlaceBlocked(Player player, Block block, Material type) {
-		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE && WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) {
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) {
 			// Disabled?
-			if (WGCommon.areRegionsDisabled(player.getWorld())) return true;
+			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
 			
 			// Bypass?
-			if (!WGCommon.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) return true;
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) return true;
 			
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_PLACE, block.getLocation());

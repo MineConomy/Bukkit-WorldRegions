@@ -1,14 +1,16 @@
-package com.wolflink289.bukkit.worldregions;
+package com.thebinaryfox.worldregions;
 
 import java.io.File;
 import java.util.List;
 import java.util.logging.Logger;
+
 import org.bukkit.plugin.java.JavaPlugin;
+
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.wolflink289.bukkit.worldregions.listen.BlockListener;
-import com.wolflink289.bukkit.worldregions.listen.EntityListener;
-import com.wolflink289.bukkit.worldregions.listen.PlayerListener;
-import com.wolflink289.bukkit.worldregions.misc.PlayerStore;
+import com.thebinaryfox.worldregions.listen.BlockListener;
+import com.thebinaryfox.worldregions.listen.EntityListener;
+import com.thebinaryfox.worldregions.listen.PlayerListener;
+import com.thebinaryfox.worldregions.misc.PlayerStore;
 
 public class WorldRegionsPlugin extends JavaPlugin {
 	
