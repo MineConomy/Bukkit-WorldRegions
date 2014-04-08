@@ -3,7 +3,7 @@ description: Add more flags and features to WorldGuard regions.
 author: Wolflink289
 website: http://dev.bukkit.org/server-mods/worldregions/
 
-version: 1.0.0
+version: 1.0.1
 main: com.wolflink289.bukkit.worldregions.WorldRegionsPlugin
 
 depend: [WorldGuard]

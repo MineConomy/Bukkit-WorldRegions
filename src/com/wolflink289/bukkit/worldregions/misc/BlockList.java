@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.bukkit.Material;
 
 /**
@@ -73,7 +74,8 @@ public class BlockList extends ArrayList<Material> {
 		return blk;
 	}
 	
-	// Get potion effect type
+	// Get block type
+	@SuppressWarnings("deprecation")
 	static private Material getType(String str) {
 		// By ID
 		try {

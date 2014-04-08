@@ -3,9 +3,12 @@ package com.wolflink289.bukkit.worldregions.misc;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 
 /**
@@ -14,16 +17,17 @@ import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
  * @author Wolflink289
  */
 public class PlayerStore {
-	
+
 	static private boolean setup = false;
 	static private ArrayList<PlayerStore> stored_vals = new ArrayList<PlayerStore>();
 	static private final Object stored_sync = new Object();
 	static private final HashMap<Integer, PlayerStore> stored = new HashMap<Integer, PlayerStore>();
-	
+
 	/**
 	 * Get and generate (if need be) a PlayerStore object for a player.
 	 * 
-	 * @param player the player.
+	 * @param player
+	 *            the player.
 	 * @return the PlayerStore object.
 	 */
 	static public PlayerStore get(Player player) {
@@ -38,7 +42,7 @@ public class PlayerStore {
 		}
 		return store;
 	}
-	
+
 	/**
 	 * Get all PlayerStore objects.
 	 * 
@@ -47,11 +51,12 @@ public class PlayerStore {
 	static public List<PlayerStore> all() {
 		return stored_vals;
 	}
-	
+
 	/**
 	 * Destroy a PlayerStore object if it exists.
 	 * 
-	 * @param player the player.
+	 * @param player
+	 *            the player.
 	 */
 	static public void destroy(Player player) {
 		synchronized (stored_sync) {
@@ -61,7 +66,7 @@ public class PlayerStore {
 			}
 		}
 	}
-	
+
 	/**
 	 * Clear all the PlayerStore objects from the PlayerStore cache.
 	 */
@@ -70,37 +75,57 @@ public class PlayerStore {
 			stored.clear();
 		}
 	}
-	
+
 	static private void regenlist() {
 		stored_vals = new ArrayList<PlayerStore>(stored.size());
 		PlayerStore[] stored_rval = stored.values().toArray(new PlayerStore[0]);
-		
+
 		for (int i = 0; i < stored_rval.length; i++) {
 			stored_vals.add(stored_rval[i]);
 		}
 	}
-	
+
 	// Instance
 	private PlayerStore(Player player) {
 		if (!setup) {
 			setup = true;
 			WorldRegionsPlugin.getInstance().getServer().getPluginManager().registerEvents(new PlayerStoreListener(), WorldRegionsPlugin.getInstance());
 		}
-		
+
 		name = player.getName();
+		uuid = player.getUniqueId();
 	}
-	
+
 	/**
 	 * Get the player of the player store.
 	 * 
 	 * @return the player, or null.
 	 */
 	public Player getPlayer() {
-		return Bukkit.getPlayer(name);
+		return Bukkit.getPlayer(uuid);
 	}
-	
+
+	/**
+	 * Get the name of the player.
+	 * 
+	 * @return the name of the player.
+	 */
+	public String getPlayerName() {
+		return name;
+	}
+
+	/**
+	 * Get the unique identifier of the player.
+	 * 
+	 * @return the UUID.
+	 */
+	public UUID getPlayerUUID() {
+		return uuid;
+	}
+
 	private final String name;
-	
+	private final UUID uuid;
+
 	public byte orig_state_fly = (byte) -1;
 	public byte last_state_fly = (byte) -1;
 	public Location last_location = null;

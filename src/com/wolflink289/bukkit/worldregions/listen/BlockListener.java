@@ -11,6 +11,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
+
 import com.wolflink289.bukkit.worldregions.WorldRegionsFlags;
 import com.wolflink289.bukkit.worldregions.WorldRegionsPlugin;
 import com.wolflink289.bukkit.worldregions.misc.BlockList;
@@ -61,6 +62,7 @@ public class BlockListener implements Listener {
 	/**
 	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onBlockDrain(PlayerBucketFillEvent event) {
 		if (!handleBreak(event.getPlayer(), event.getBlockClicked())) {
