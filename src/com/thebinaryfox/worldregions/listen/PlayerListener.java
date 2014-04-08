@@ -27,102 +27,119 @@ import com.thebinaryfox.worldregions.util.RegionUtil;
 import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class PlayerListener implements Listener {
-	
+
 	private boolean timedtask = false;
-	
+
 	/**
 	 * Listener for: HUNGER
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFoodLevelChance(FoodLevelChangeEvent event) {
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HUNGER) return;
-		
-		if (!(event.getEntity() instanceof Player)) return;
-		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation())) return;
-		if (((Player) event.getEntity()).getFoodLevel() < event.getFoodLevel()) return;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HUNGER)
+			return;
+
+		if (!(event.getEntity() instanceof Player))
+			return;
+		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation()))
+			return;
+		if (((Player) event.getEntity()).getFoodLevel() < event.getFoodLevel())
+			return;
+
 		// Disabled?
-		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
-		
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+			return;
+
 		// Bypass?
-		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
-		
+		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER))
+			return;
+
 		// Cancel event
 		event.setCancelled(true);
 	}
-	
+
 	/**
 	 * Listener for: HEALING, REGEN
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onFoodLevelChance(EntityRegainHealthEvent event) {
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !WorldRegionsPlugin.getInstanceConfig().ENABLE_REGEN) return;
-		
-		if (!(event.getEntity() instanceof Player)) return;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !WorldRegionsPlugin.getInstanceConfig().ENABLE_REGEN)
+			return;
+
+		if (!(event.getEntity() instanceof Player))
+			return;
+
 		// Disabled?
-		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
-		
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+			return;
+
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_HEALING && !RegionUtil.getFlag(WorldRegionsFlags.HEALING, event.getEntity().getLocation())) {
 			// Bypass?
-			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HEALING)) return;
-			
+			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HEALING))
+				return;
+
 			// Cancel event
 			event.setCancelled(true);
 		} else if (WorldRegionsPlugin.getInstanceConfig().ENABLE_REGEN && event.getRegainReason() == RegainReason.SATIATED) {
-			if (RegionUtil.getFlag(WorldRegionsFlags.REGEN, event.getEntity().getLocation())) return;
-			
+			if (RegionUtil.getFlag(WorldRegionsFlags.REGEN, event.getEntity().getLocation()))
+				return;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.REGEN)) return;
-			
+			if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.REGEN))
+				return;
+
 			// Cancel event
 			event.setCancelled(true);
 		}
 	}
-	
+
 	/**
 	 * Listener for: HUNGER
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onHungerDamage(EntityDamageEvent event) {
-		if (event.getCause() != DamageCause.STARVATION) return;
-		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation())) return;
-		
+		if (event.getCause() != DamageCause.STARVATION)
+			return;
+		if (RegionUtil.getFlag(WorldRegionsFlags.HUNGER, event.getEntity().getLocation()))
+			return;
+
 		// Disabled?
-		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld())) return;
-		
+		if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+			return;
+
 		// Bypass?
-		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER)) return;
-		
+		if (!WGUtil.willFlagApply((Player) event.getEntity(), WorldRegionsFlags.HUNGER))
+			return;
+
 		// Cancel event
 		event.setCancelled(true);
 	}
-	
+
 	/**
 	 * Listener for: APPLY-POTION, FLY
 	 */
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && !WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION) return;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && !WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION)
+			return;
+
 		// Disabled?
-		if (WGUtil.areRegionsDisabled(event.getTo().getWorld())) return;
+		if (WGUtil.areRegionsDisabled(event.getTo().getWorld()))
+			return;
 		Player player = event.getPlayer();
-		
-		
+
 		// APPLY-POTION
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_APPLY_POTION && WGUtil.willFlagApply(player, WorldRegionsFlags.APPLY_POTION)) {
-			
+
 			// Get / Check
 			Object res = RegionUtil.getFlag(WorldRegionsFlags.APPLY_POTION, event.getTo());
 			if (res != null) {
-				
+
 				// Apply
 				PlayerStore store = PlayerStore.get(player);
 				store.effects = (PotionEffectList) res;
-				
+
 				player.addPotionEffects(store.effects);
-				
+
 				// Start?
 				if (!timedtask) {
 					timedtask = true;
@@ -135,13 +152,13 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-		
+
 		// TIME
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_TIME && WGUtil.willFlagApply(player, WorldRegionsFlags.TIME)) {
 			// Get / Check
 			Object res = RegionUtil.getFlag(WorldRegionsFlags.TIME, event.getTo());
 			if (res != null) {
-				
+
 				// Apply
 				PlayerStore store = PlayerStore.get(player);
 				store.time = (Integer) res;
@@ -159,23 +176,24 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-		
+
 		// FLY
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGUtil.willFlagApply(player, null)) {
 			// Get / Check
 			Object res = RegionUtil.getFlagAsObject(WorldRegionsFlags.FLY, event.getTo());
 			PlayerStore store = PlayerStore.get(player);
-			
+
 			// Bypass
 			if (player.hasPermission("worldregions.bypass.flag.fly")) {
-				if (res == StateFlag.State.DENY) return;
+				if (res == StateFlag.State.DENY)
+					return;
 			}
-			
+
 			// Apply
 			if (res == null && store.last_state_fly != -1) {
 				if (store.orig_state_fly != (byte) (player.getAllowFlight() ? 1 : 0)) {
 					player.setAllowFlight(store.orig_state_fly == 1);
-					
+
 					// Message
 					String msg = "";
 					if (store.orig_state_fly == 0) {
@@ -183,12 +201,12 @@ public class PlayerListener implements Listener {
 					} else {
 						msg = WorldRegionsPlugin.getInstanceConfig().MSG_FLY_RESET_BLOCK;
 					}
-					
+
 					if (!msg.isEmpty()) {
 						player.sendMessage(msg);
 					}
 				}
-				
+
 				// Clear store
 				store.orig_state_fly = (byte) -1;
 				store.last_state_fly = store.orig_state_fly;
@@ -199,10 +217,10 @@ public class PlayerListener implements Listener {
 							store.orig_state_fly = (byte) (player.getAllowFlight() ? 1 : 0);
 							store.last_state_fly = store.orig_state_fly;
 						}
-						
+
 						store.last_state_fly = (byte) (res == StateFlag.State.ALLOW ? 1 : 0);
 						player.setAllowFlight(res == StateFlag.State.ALLOW);
-						
+
 						// Message
 						String msg = "";
 						if (res == StateFlag.State.ALLOW) {
@@ -210,7 +228,7 @@ public class PlayerListener implements Listener {
 						} else {
 							msg = WorldRegionsPlugin.getInstanceConfig().MSG_FLY_SET_BLOCK;
 						}
-						
+
 						if (!msg.isEmpty()) {
 							player.sendMessage(msg);
 						}
@@ -219,146 +237,163 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Listener for: APPLY-POTION, FLY
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onModeChanged(PlayerGameModeChangeEvent event) {
 		Player player = event.getPlayer();
-		
+
 		// FLY
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_FLY && WGUtil.willFlagApply(player, WorldRegionsFlags.FLY)) {
 			// Get / Check
 			PlayerStore store = PlayerStore.get(player);
-			
+
 			if (store.last_state_fly != -1) {
 				if (player.getAllowFlight()) {
 					store.orig_state_fly = 1;
 				} else {
 					store.orig_state_fly = 0;
 				}
-				
+
 				player.setAllowFlight(store.last_state_fly == 1);
 			}
 		}
 	}
-	
+
 	/**
 	 * Listener for: ITEM-PICKUP
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onItemSpawn(PlayerPickupItemEvent event) {
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_PICKUP) return;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ITEM_PICKUP)
+			return;
+
 		// Bypass
-		if (!WGUtil.willFlagApply((Player) event.getPlayer(), WorldRegionsFlags.ITEM_PICKUP)) return;
-		
+		if (!WGUtil.willFlagApply((Player) event.getPlayer(), WorldRegionsFlags.ITEM_PICKUP))
+			return;
+
 		// Check if item pickup allowed
-		if (RegionUtil.getFlag(WorldRegionsFlags.ITEM_PICKUP, event.getPlayer().getLocation())) return;
-		
+		if (RegionUtil.getFlag(WorldRegionsFlags.ITEM_PICKUP, event.getPlayer().getLocation()))
+			return;
+
 		// Disabled?
-		if (WGUtil.areRegionsDisabled(event.getPlayer().getWorld())) return;
-		
+		if (WGUtil.areRegionsDisabled(event.getPlayer().getWorld()))
+			return;
+
 		// Cancel event
 		event.setCancelled(true);
 	}
-	
+
 	/**
 	 * Listener for: ALLOWED-DAMAGE, BLOCKED-DAMAGE
 	 */
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onDamage(EntityDamageEvent event) {
-		if (event.getEntityType() != EntityType.PLAYER) return;
-		
+		if (event.getEntityType() != EntityType.PLAYER)
+			return;
+
 		// BLOCKED-BREAK, ALLOWED-BREAK
 		if (!handleBreak((Player) event.getEntity(), event.getCause())) {
 			event.setCancelled(true);
 			return;
 		}
 	}
-	
+
 	// Entity damage stuff
-	
+
 	private boolean handleDamageAllowed(Player player, DamageCause type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_DAMAGE))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_DAMAGE, player.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			DamageList list = (DamageList) blocked;
-			if (list.contains(type)) return true;
-			
+			if (list.contains(type))
+				return true;
+
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handleDamageBlocked(Player player, DamageCause type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_DAMAGE))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_DAMAGE, player.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			DamageList list = (DamageList) blocked;
-			if (list.contains(type)) return false;
-			
+			if (list.contains(type))
+				return false;
+
 			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handleBreak(Player player, DamageCause type) {
 		// Enabled?
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE) return true;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_DAMAGE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_DAMAGE)
+			return true;
+
 		// ALLOWED-BREAK
-		if (!handleDamageAllowed(player, type)) return false;
-		
+		if (!handleDamageAllowed(player, type))
+			return false;
+
 		// BLOCKED-BREAK
-		if (!handleDamageBlocked(player, type)) return false;
-		
+		if (!handleDamageBlocked(player, type))
+			return false;
+
 		// ...
 		return true;
 	}
-	
+
 	// Tick stuff
 	private int counter;
-	
+
 	/**
 	 * Listener for actions that need to be executed every few ticks.
 	 */
 	private void onTick() {
 		counter++;
-		if (counter > 250 * 19) counter = 0;
-		
+		if (counter > 250 * 19)
+			counter = 0;
+
 		// Every 19 ticks
 		if (counter % 19 == 0) {
 			List<PlayerStore> stores = PlayerStore.all();
-			
+
 			for (int i = 0; i < stores.size(); i++) {
 				PlayerStore store = stores.get(i);
 				Player player = store.getPlayer();
-				
+
 				// Update
 				onTickRegionUpdate(store, player);
-				
+
 				// Do actions
 				// APPLY-POTION
 				if (store.effects != null) {
@@ -370,15 +405,15 @@ public class PlayerListener implements Listener {
 				}
 			}
 		}
-		
+
 		// Every 250 ticks
 		if (counter % 250 == 0) {
 			List<PlayerStore> stores = PlayerStore.all();
-			
+
 			for (int i = 0; i < stores.size(); i++) {
 				PlayerStore store = stores.get(i);
 				Player player = store.getPlayer();
-				
+
 				// TIME
 				if (store.time != null) {
 					player.setPlayerTime(store.time + 18000, false);
@@ -386,14 +421,15 @@ public class PlayerListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Update cached information for a player
 	 */
 	private void onTickRegionUpdate(PlayerStore store, Player player) {
-		if (player.getLocation().equals(store.last_location)) return;
+		if (player.getLocation().equals(store.last_location))
+			return;
 		store.last_location = player.getLocation().clone();
-		
+
 		// APPLY-POTION
 		Object res = RegionUtil.getFlag(WorldRegionsFlags.APPLY_POTION, player.getLocation());
 		if (res == null) {
@@ -401,7 +437,7 @@ public class PlayerListener implements Listener {
 		} else {
 			store.effects = (PotionEffectList) res;
 		}
-		
+
 		// TIME
 		res = RegionUtil.getFlag(WorldRegionsFlags.TIME, player.getLocation());
 		if (res == null) {

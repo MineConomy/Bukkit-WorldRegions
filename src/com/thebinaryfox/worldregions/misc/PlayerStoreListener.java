@@ -12,14 +12,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @author Wolflink289
  */
 public class PlayerStoreListener implements Listener {
-	
+
 	@EventHandler(priority = EventPriority.LOW)
 	public void onQuit(PlayerQuitEvent event) {
 		PlayerStore.destroy(event.getPlayer());
 	}
-	
+
 	public void onKick(PlayerKickEvent event) {
 		PlayerStore.destroy(event.getPlayer());
 	}
-	
+
 }

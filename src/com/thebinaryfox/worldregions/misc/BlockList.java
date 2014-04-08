@@ -14,7 +14,7 @@ import org.bukkit.Material;
  */
 public class BlockList extends ArrayList<Material> {
 	private static final long serialVersionUID = 2230002600165589763L;
-	
+
 	// Replace toString method
 	@Override
 	public String toString() {
@@ -27,99 +27,111 @@ public class BlockList extends ArrayList<Material> {
 				msd = msd + ", " + block.name();
 			}
 		}
-		
+
 		return "[" + msd + "]";
 	}
-	
+
 	// Parse
 	static public BlockList unmarshal(String str) {
 		str = str.trim();
-		
-		if (str.startsWith("[")) str = str.substring(1);
-		if (str.endsWith("]")) str = str.substring(0, str.length() - 1);
-		
+
+		if (str.startsWith("["))
+			str = str.substring(1);
+		if (str.endsWith("]"))
+			str = str.substring(0, str.length() - 1);
+
 		BlockList blk = new BlockList();
 		String[] list = str.split(",");
 		for (int i = 0; i < list.length; i++) {
 			try {
 				blk.add(getType(list[i].trim()));
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+			}
 		}
-		
+
 		return blk;
 	}
-	
+
 	static public BlockList parse(String str) {
-		if (str == null) return null;
+		if (str == null)
+			return null;
 		if (str.equals("*")) {
 			BlockList all = new BlockList();
 			Collections.addAll(all, getTypes());
 			return all;
 		}
-		
+
 		if (str.equals(".")) {
 			return new BlockList();
 		}
-		
+
 		// Split
 		str = str.trim();
 		String[] blocks = str.split(",");
-		
+
 		BlockList blk = new BlockList();
 		for (int i = 0; i < blocks.length; i++) {
 			// Get data
 			blk.add(getType(blocks[i].trim()));
 		}
-		
+
 		return blk;
 	}
-	
+
 	// Get block type
 	@SuppressWarnings("deprecation")
 	static private Material getType(String str) {
 		// By ID
 		try {
 			Material mat = Material.getMaterial(Integer.parseInt(str));
-			if (mat != null && mat.isBlock()) return mat;
-		} catch (Exception ex) {}
-		
+			if (mat != null && mat.isBlock())
+				return mat;
+		} catch (Exception ex) {
+		}
+
 		// By Name
 		Material[] types = getTypes();
 		for (int i = 0; i < types.length; i++) {
-			if (types[i].name().equalsIgnoreCase(str)) return types[i];
+			if (types[i].name().equalsIgnoreCase(str))
+				return types[i];
 		}
-		
+
 		for (int i = 0; i < types.length; i++) {
-			if (types[i].name().replace("_", "").equalsIgnoreCase(str)) return types[i];
+			if (types[i].name().replace("_", "").equalsIgnoreCase(str))
+				return types[i];
 		}
-		
+
 		for (int i = 0; i < types.length; i++) {
-			if (types[i].name().replace("_", " ").equalsIgnoreCase(str)) return types[i];
+			if (types[i].name().replace("_", " ").equalsIgnoreCase(str))
+				return types[i];
 		}
-		
+
 		throw new RuntimeException("Unknown block: " + str);
 	}
-	
+
 	// Get all block types via reflection
 	static private Material[] typecache = null;
-	
+
 	static private Material[] getTypes() {
-		if (typecache != null) return typecache;
-		
+		if (typecache != null)
+			return typecache;
+
 		List<Material> materials = new ArrayList<Material>();
 		Field[] materialFields = Material.class.getFields();
-		
+
 		for (Field f : materialFields) {
 			try {
 				Object got = f.get(null);
 				if (got instanceof Material) {
-					if (!((Material) got).isBlock()) continue;
-					
+					if (!((Material) got).isBlock())
+						continue;
+
 					materials.add((Material) f.get(null));
 				}
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+			}
 		}
-		
+
 		typecache = materials.toArray(new Material[0]);
 		return typecache;
 	}

@@ -14,34 +14,38 @@ import com.thebinaryfox.worldregions.WorldRegionsPlugin;
  * @author Wolflink289
  */
 public class WGUtil {
-	
+
 	/**
 	 * Are regions diabled for the specified world?
 	 * 
-	 * @param world the world to check.
+	 * @param world
+	 *            the world to check.
 	 * @return true if regions are disabled.
 	 */
 	static public boolean areRegionsDisabled(World world) {
 		ConfigurationManager cfg = WorldRegionsPlugin.getWorldGuard().getGlobalStateManager();
 		WorldConfiguration wcfg = cfg.get(world);
-		
+
 		return !wcfg.useRegions;
 	}
-	
+
 	/**
 	 * Will the flag apply to the player?
 	 * 
-	 * @param player the player to check.
-	 * @param flag the flag to check.
+	 * @param player
+	 *            the player to check.
+	 * @param flag
+	 *            the flag to check.
 	 * @return true if the flag applies to the player.
 	 */
 	static public boolean willFlagApply(Player player, Flag<?> flag) {
 		// Permission?
-		if (flag != null && player.hasPermission("worldregions.bypass.flag." + flag.getName())) return false;
-		
+		if (flag != null && player.hasPermission("worldregions.bypass.flag." + flag.getName()))
+			return false;
+
 		// Bypass?
 		// TODO fix: if (WorldRegionsPlugin.getWorldGuard().getGlobalRegionManager().hasBypass(player, player.getWorld())) return false;
-		
+
 		return true;
 	}
 }

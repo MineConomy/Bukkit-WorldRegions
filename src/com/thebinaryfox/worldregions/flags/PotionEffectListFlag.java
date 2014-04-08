@@ -17,16 +17,16 @@ import com.thebinaryfox.worldregions.misc.PotionEffectList;
  * @author Wolflink289
  */
 public class PotionEffectListFlag extends Flag<PotionEffectList> {
-	
+
 	// Constructor
 	public PotionEffectListFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
-	
+
 	public PotionEffectListFlag(String name) {
 		super(name);
 	}
-	
+
 	// Parsing
 	@Override
 	public PotionEffectList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
@@ -39,7 +39,7 @@ public class PotionEffectListFlag extends Flag<PotionEffectList> {
 			throw new InvalidFlagFormat(ex.getMessage());
 		}
 	}
-	
+
 	// Marshalling
 	@Override
 	public PotionEffectList unmarshal(Object o) {
@@ -52,11 +52,12 @@ public class PotionEffectListFlag extends Flag<PotionEffectList> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Object marshal(PotionEffectList o) {
-		if (o == null) return "";
+		if (o == null)
+			return "";
 		return o.toString();
 	}
-	
+
 }

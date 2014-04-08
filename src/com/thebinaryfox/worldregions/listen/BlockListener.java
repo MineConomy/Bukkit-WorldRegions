@@ -19,7 +19,7 @@ import com.thebinaryfox.worldregions.util.RegionUtil;
 import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class BlockListener implements Listener {
-	
+
 	/**
 	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK, INSTABREAK
 	 */
@@ -31,7 +31,7 @@ public class BlockListener implements Listener {
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_BREAK);
 			return;
 		}
-		
+
 		// INSTABREAK
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_INSTABREAK) {
 			// Isn't disabled?
@@ -47,7 +47,7 @@ public class BlockListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
 	 */
@@ -58,7 +58,7 @@ public class BlockListener implements Listener {
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_BREAK);
 		}
 	}
-	
+
 	/**
 	 * Listener for: BLOCKED-BREAK, ALLOWED-BREAK
 	 */
@@ -71,7 +71,7 @@ public class BlockListener implements Listener {
 			event.getPlayer().sendBlockChange(event.getBlockClicked().getLocation(), event.getBlockClicked().getType(), event.getBlockClicked().getData());
 		}
 	}
-	
+
 	/**
 	 * Listener for: BLOCKED-PLACE, ALLOWED-PLACE
 	 */
@@ -82,7 +82,7 @@ public class BlockListener implements Listener {
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_PLACE);
 		}
 	}
-	
+
 	/**
 	 * Listener for: BLOCKED-PLACE, ALLOWED-PLACE
 	 */
@@ -93,137 +93,171 @@ public class BlockListener implements Listener {
 			event.getPlayer().sendMessage(WorldRegionsPlugin.getInstanceConfig().MSG_NO_PLACE);
 		}
 	}
-	
+
 	private boolean handleBreakAllowed(Player player, Block block) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_BREAK && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_BREAK))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_BREAK, block.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			BlockList list = (BlockList) blocked;
 			Material type = block.getType();
-			if (type == Material.STATIONARY_WATER) type = Material.WATER;
-			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
-			
-			if (list.contains(type)) { return true; }
-			
+			if (type == Material.STATIONARY_WATER)
+				type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA)
+				type = Material.LAVA;
+
+			if (list.contains(type)) {
+				return true;
+			}
+
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handleBreakBlocked(Player player, Block block) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_BREAK && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_BREAK))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_BREAK, block.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			BlockList list = (BlockList) blocked;
 			Material type = block.getType();
-			if (type == Material.STATIONARY_WATER) type = Material.WATER;
-			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
-			
-			if (list.contains(type)) { return false; }
-			
+			if (type == Material.STATIONARY_WATER)
+				type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA)
+				type = Material.LAVA;
+
+			if (list.contains(type)) {
+				return false;
+			}
+
 			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handlePlaceAllowed(Player player, Block block, Material type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.ALLOWED_PLACE))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.ALLOWED_PLACE, block.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (type == Material.STATIONARY_WATER) type = Material.WATER;
-			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
-			
-			if (list.contains(type)) { return true; }
-			
+			if (type == Material.STATIONARY_WATER)
+				type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA)
+				type = Material.LAVA;
+
+			if (list.contains(type)) {
+				return true;
+			}
+
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handlePlaceBlocked(Player player, Block block, Material type) {
 		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE && WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) {
 			// Disabled?
-			if (WGUtil.areRegionsDisabled(player.getWorld())) return true;
-			
+			if (WGUtil.areRegionsDisabled(player.getWorld()))
+				return true;
+
 			// Bypass?
-			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE)) return true;
-			
+			if (!WGUtil.willFlagApply(player, WorldRegionsFlags.BLOCKED_PLACE))
+				return true;
+
 			// Get blocked
 			Object blocked = RegionUtil.getFlag(WorldRegionsFlags.BLOCKED_PLACE, block.getLocation());
-			if (blocked == null) return true;
-			
+			if (blocked == null)
+				return true;
+
 			// Check
 			BlockList list = (BlockList) blocked;
-			if (type == Material.STATIONARY_WATER) type = Material.WATER;
-			if (type == Material.STATIONARY_LAVA) type = Material.LAVA;
-			
-			if (list.contains(type)) { return false; }
-			
+			if (type == Material.STATIONARY_WATER)
+				type = Material.WATER;
+			if (type == Material.STATIONARY_LAVA)
+				type = Material.LAVA;
+
+			if (list.contains(type)) {
+				return false;
+			}
+
 			return true;
 		}
-		
+
 		return true;
 	}
-	
+
 	private boolean handleBreak(Player player, Block block) {
 		// Enabled?
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_BREAK && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_BREAK) return true;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_BREAK && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_BREAK)
+			return true;
+
 		// ALLOWED-BREAK
-		if (!handleBreakAllowed(player, block)) return false;
-		
+		if (!handleBreakAllowed(player, block))
+			return false;
+
 		// BLOCKED-BREAK
-		if (!handleBreakBlocked(player, block)) return false;
-		
+		if (!handleBreakBlocked(player, block))
+			return false;
+
 		// ...
 		return true;
 	}
-	
+
 	private boolean handlePlace(Player player, Block block) {
 		return handlePlace(player, block, block.getType());
 	}
-	
+
 	private boolean handlePlace(Player player, Block block, Material type) {
 		// Enabled?
-		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE) return true;
-		
+		if (!WorldRegionsPlugin.getInstanceConfig().ENABLE_ALLOWED_PLACE && !WorldRegionsPlugin.getInstanceConfig().ENABLE_BLOCKED_PLACE)
+			return true;
+
 		// ALLOWED-PLACE
-		if (!handlePlaceAllowed(player, block, type)) return false;
-		
+		if (!handlePlaceAllowed(player, block, type))
+			return false;
+
 		// BLOCKED-PLACE
-		if (!handlePlaceBlocked(player, block, type)) return false;
-		
+		if (!handlePlaceBlocked(player, block, type))
+			return false;
+
 		// ...
 		return true;
 	}

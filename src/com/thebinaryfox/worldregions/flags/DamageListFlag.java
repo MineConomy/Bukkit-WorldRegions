@@ -17,16 +17,16 @@ import com.thebinaryfox.worldregions.misc.DamageList;
  * @author Wolflink289
  */
 public class DamageListFlag extends Flag<DamageList> {
-	
+
 	// Constructor
 	public DamageListFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
-	
+
 	public DamageListFlag(String name) {
 		super(name);
 	}
-	
+
 	// Parsing
 	@Override
 	public DamageList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
@@ -39,7 +39,7 @@ public class DamageListFlag extends Flag<DamageList> {
 			throw new InvalidFlagFormat(ex.getMessage());
 		}
 	}
-	
+
 	// Marshalling
 	@Override
 	public DamageList unmarshal(Object o) {
@@ -52,11 +52,12 @@ public class DamageListFlag extends Flag<DamageList> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Object marshal(DamageList o) {
-		if (o == null) return "";
+		if (o == null)
+			return "";
 		return o.toString();
 	}
-	
+
 }

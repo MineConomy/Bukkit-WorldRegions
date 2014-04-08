@@ -17,16 +17,16 @@ import com.thebinaryfox.worldregions.util.TimeUtil;
  * @author Wolflink289
  */
 public class TimeFlag extends Flag<Integer> {
-	
+
 	// Constructor
 	public TimeFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
-	
+
 	public TimeFlag(String name) {
 		super(name);
 	}
-	
+
 	// Parsing
 	@Override
 	public Integer parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
@@ -39,7 +39,7 @@ public class TimeFlag extends Flag<Integer> {
 			throw new InvalidFlagFormat(ex.getMessage());
 		}
 	}
-	
+
 	// Marshalling
 	@Override
 	public Integer unmarshal(Object o) {
@@ -52,11 +52,12 @@ public class TimeFlag extends Flag<Integer> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Object marshal(Integer o) {
-		if (o == null) return "";
+		if (o == null)
+			return "";
 		return o.toString();
 	}
-	
+
 }

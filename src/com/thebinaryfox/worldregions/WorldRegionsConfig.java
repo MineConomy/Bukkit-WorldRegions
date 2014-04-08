@@ -4,27 +4,28 @@ import java.io.File;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class WorldRegionsConfig {
-	
+
 	private YamlConfiguration cfg;
-	
+
 	public WorldRegionsConfig(File file) {
 		// Load
 		cfg = new YamlConfiguration();
-		
+
 		try {
 			cfg.load(file);
-		} catch (Exception ex) {}
-		
+		} catch (Exception ex) {
+		}
+
 		// Defaults
 		defaults();
-		
+
 		// Save
 		try {
 			cfg.save(file);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		// Read
 		ENABLE_FLY = cfg.getBoolean("flag.fly.enabled");
 		ENABLE_APPLY_POTION = cfg.getBoolean("flag.apply-potion.enabled");
@@ -51,7 +52,7 @@ public class WorldRegionsConfig {
 		MSG_NO_BREAK = cfg.getString("message.misc.no-break").trim().replace('&', '\247');
 		MSG_NO_PLACE = cfg.getString("message.misc.no-place").trim().replace('&', '\247');
 	}
-	
+
 	private void defaults() {
 		setDefault("flag.apply-potion.enabled", true);
 		setDefault("flag.blocked-break.enabled", true);
@@ -78,13 +79,13 @@ public class WorldRegionsConfig {
 		setDefault("message.misc.no-place", "&cYou are not allowed to place that block!");
 		setDefault("message.misc.no-break", "&cYou are not allowed to break that block!");
 	}
-	
+
 	private void setDefault(String name, Object value) {
 		if (!cfg.contains(name)) {
 			cfg.set(name, value);
 		}
 	}
-	
+
 	public final boolean ENABLE_FLY;
 	public final boolean ENABLE_APPLY_POTION;
 	public final boolean ENABLE_MOB_TARGETING;

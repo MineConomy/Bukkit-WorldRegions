@@ -17,16 +17,16 @@ import com.thebinaryfox.worldregions.misc.BlockList;
  * @author Wolflink289
  */
 public class ItemListFlag extends Flag<BlockList> {
-	
+
 	// Constructor
 	public ItemListFlag(String name, RegionGroup defaultGroup) {
 		super(name, defaultGroup);
 	}
-	
+
 	public ItemListFlag(String name) {
 		super(name);
 	}
-	
+
 	// Parsing
 	@Override
 	public BlockList parseInput(WorldGuardPlugin plugin, CommandSender sender, String input) throws InvalidFlagFormat {
@@ -39,7 +39,7 @@ public class ItemListFlag extends Flag<BlockList> {
 			throw new InvalidFlagFormat(ex.getMessage());
 		}
 	}
-	
+
 	// Marshalling
 	@Override
 	public BlockList unmarshal(Object o) {
@@ -52,11 +52,12 @@ public class ItemListFlag extends Flag<BlockList> {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Object marshal(BlockList o) {
-		if (o == null) return "";
+		if (o == null)
+			return "";
 		return o.toString();
 	}
-	
+
 }

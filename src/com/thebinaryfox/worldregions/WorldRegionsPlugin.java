@@ -13,14 +13,14 @@ import com.thebinaryfox.worldregions.listen.PlayerListener;
 import com.thebinaryfox.worldregions.misc.PlayerStore;
 
 public class WorldRegionsPlugin extends JavaPlugin {
-	
+
 	// Variables
 	static private WorldRegionsConfig config;
 	static private Logger log;
 	static private WorldRegionsPlugin instance;
 	static private WorldGuardPlugin instance_wg;
 	static private boolean loaded = false;
-	
+
 	// Methods
 	/**
 	 * Get the instance of the WorldRegionsPlugin.
@@ -30,7 +30,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	static public WorldRegionsPlugin getInstance() {
 		return instance;
 	}
-	
+
 	/**
 	 * Get the instance of WorldGuardPlugin.
 	 * 
@@ -39,7 +39,7 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	static public WorldGuardPlugin getWorldGuard() {
 		return instance_wg;
 	}
-	
+
 	/**
 	 * Get the WorldRegionsPlugin logger.
 	 * 
@@ -48,59 +48,61 @@ public class WorldRegionsPlugin extends JavaPlugin {
 	static public Logger getInstanceLogger() {
 		return log;
 	}
-	
+
 	static public WorldRegionsConfig getInstanceConfig() {
 		return config;
 	}
-	
+
 	// Listener: Plugin Loaded
 	@Override
 	public void onLoad() {
-		if (loaded) return;
-		
+		if (loaded)
+			return;
+
 		// Set static variables
 		instance = this;
 		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
 		log = getLogger();
-		
+
 		// Inject flags
 		WorldRegionsFlags.inject();
-		
+
 		// Set loaded
 		loaded = true;
 	}
-	
+
 	// Listener: Plugin Enabled
 	@Override
 	public void onEnable() {
-		if (!loaded) onLoad();
-		
+		if (!loaded)
+			onLoad();
+
 		instance_wg = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
-		
+
 		config = new WorldRegionsConfig(new File(instance_wg.getDataFolder(), "config_worldregions.yml"));
-		
+
 		getServer().getPluginManager().registerEvents(new EntityListener(), instance);
 		getServer().getPluginManager().registerEvents(new PlayerListener(), instance);
 		getServer().getPluginManager().registerEvents(new BlockListener(), instance);
 	}
-	
+
 	// Listener: Plugin Disabled
 	@Override
 	public void onDisable() {
 		WorldRegionsFlags.release();
-		
+
 		// Reset
 		List<PlayerStore> stores = PlayerStore.all();
-		
+
 		for (int i = 0; i < stores.size(); i++) {
 			PlayerStore store = stores.get(i);
-			
+
 			// FLY
 			if (store.orig_state_fly != -1) {
 				store.getPlayer().setAllowFlight(store.orig_state_fly == 1);
 			}
 		}
-		
+
 		// Finish
 		PlayerStore.clear();
 		loaded = false;
