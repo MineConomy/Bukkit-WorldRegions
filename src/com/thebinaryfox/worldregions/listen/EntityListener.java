@@ -1,10 +1,12 @@
 package com.thebinaryfox.worldregions.listen;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -18,6 +20,26 @@ import com.thebinaryfox.worldregions.util.RegionUtil;
 import com.thebinaryfox.worldregions.util.WGUtil;
 
 public class EntityListener implements Listener {
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+		//
+		// Sheep eating grass.
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_SHEEP_EAT) {
+			if (event.getEntityType() == EntityType.SHEEP) {
+
+				// Disabled?
+				if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+					return;
+
+				// Allowed?
+				if (RegionUtil.getFlag(WorldRegionsFlags.MOB_TARGETING, event.getBlock().getLocation()))
+					return;
+				
+				event.setCancelled(true);
+			}
+		}
+	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onTarget(EntityTargetEvent event) {
