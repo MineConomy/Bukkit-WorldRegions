@@ -28,7 +28,8 @@ public final class WorldRegionsFlags {
 	static public final StateFlag FLY = new StateFlag("fly", true, RegionGroup.ALL);
 	static public final StateFlag ITEM_PICKUP = new StateFlag("item-pickup", true, RegionGroup.ALL);
 	static public final StateFlag INSTABREAK = new StateFlag("instabreak", false, RegionGroup.ALL);
-	static public final StateFlag SHEEP_EAT = new StateFlag("sheep-eat", false, RegionGroup.NONE);
+	static public final StateFlag SHEEP_EAT = new StateFlag("sheep-eat", true, RegionGroup.NONE);
+	static public final StateFlag WITHER_DESTROY = new StateFlag("wither-block-damage", true, RegionGroup.NONE);
 	static public final PotionEffectListFlag APPLY_POTION = new PotionEffectListFlag("apply-potion", RegionGroup.ALL);
 	static public final BlockListFlag BLOCKED_PLACE = new BlockListFlag("blocked-place", RegionGroup.ALL);
 	static public final BlockListFlag BLOCKED_BREAK = new BlockListFlag("blocked-break", RegionGroup.ALL);
@@ -38,7 +39,7 @@ public final class WorldRegionsFlags {
 	static public final DamageListFlag ALLOWED_DAMAGE = new DamageListFlag("allowed-damage", RegionGroup.ALL);
 	static public final TimeFlag TIME = new TimeFlag("time", RegionGroup.ALL);
 
-	static public final Flag<?>[] defaults = new Flag<?>[] { SHEEP_EAT, PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY, BLOCKED_PLACE, BLOCKED_BREAK, ALLOWED_PLACE, ALLOWED_BREAK, ITEM_PICKUP, INSTABREAK, ALLOWED_DAMAGE, BLOCKED_DAMAGE, TIME };
+	static public final Flag<?>[] defaults = new Flag<?>[] { WITHER_DESTROY, SHEEP_EAT, PVE, MOB_TARGETING, ZOMBIE_DOOR_BREAK, ITEM_SPAWN, HUNGER, REGEN, HEALING, APPLY_POTION, FLY, BLOCKED_PLACE, BLOCKED_BREAK, ALLOWED_PLACE, ALLOWED_BREAK, ITEM_PICKUP, INSTABREAK, ALLOWED_DAMAGE, BLOCKED_DAMAGE, TIME };
 	static public final Flag<?>[] originals = DefaultFlag.getFlags();
 
 	// Get Flags

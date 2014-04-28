@@ -1,6 +1,9 @@
 package com.thebinaryfox.worldregions.listen;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +13,7 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
@@ -33,10 +37,53 @@ public class EntityListener implements Listener {
 					return;
 
 				// Allowed?
-				if (RegionUtil.getFlag(WorldRegionsFlags.MOB_TARGETING, event.getBlock().getLocation()))
+				if (RegionUtil.getFlag(WorldRegionsFlags.SHEEP_EAT, event.getBlock().getLocation()))
 					return;
-				
+
 				event.setCancelled(true);
+				return;
+			}
+		}
+
+		//
+		// Wither destroying blocks.
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_WITHER_DESTROY) {
+			if (event.getEntityType() == EntityType.WITHER || event.getEntityType() == EntityType.WITHER_SKULL) {
+				// Disabled?
+				if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+					return;
+
+				// Allowed?
+				if (RegionUtil.getFlag(WorldRegionsFlags.WITHER_DESTROY, event.getBlock().getLocation()))
+					return;
+
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onEntityExplode(EntityExplodeEvent event) {
+		//
+		// Wither destroying blocks.
+		if (WorldRegionsPlugin.getInstanceConfig().ENABLE_WITHER_DESTROY) {
+			if (event.getEntityType() == EntityType.WITHER || event.getEntityType() == EntityType.WITHER_SKULL) {
+				// Disabled?
+				if (WGUtil.areRegionsDisabled(event.getEntity().getWorld()))
+					return;
+
+				List<Block> blocks = event.blockList();
+				for (int i = 0; i < blocks.size(); i++) {
+					// Allowed?
+					if (RegionUtil.getFlag(WorldRegionsFlags.WITHER_DESTROY, blocks.get(i).getLocation()))
+						continue;
+
+					blocks.remove(i);
+					i--;
+				}
+
+				return;
 			}
 		}
 	}
